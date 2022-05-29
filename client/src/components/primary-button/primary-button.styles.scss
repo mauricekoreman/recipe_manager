@@ -1,0 +1,15 @@
+@import '../../sass/variables';
+
+.primary-button {
+  padding: 1.5rem 0;
+  border-radius: 100rem;
+  background-color: $color-primary;
+  color: #FFF; 
+  border: none;
+  width: 100%;
+
+  &:hover {
+    background-color: $color-primary--hover;
+    cursor: pointer;
+  }
+}
