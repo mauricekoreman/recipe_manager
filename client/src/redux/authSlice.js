@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import requests from "../api/requests";
 
 // Get uer from localstorage
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("RECIPE_MANAGER_USER"));
 
 const initialState = {
   user: user ? user : null,

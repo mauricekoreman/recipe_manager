@@ -8,7 +8,7 @@ async function httpRegister(userData) {
     const response = await axios.post(`${API_URL}/register`, userData);
 
     if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("RECIPE_MANAGER_USER", JSON.stringify(response.data));
 
       return response.data;
     }
@@ -23,7 +23,7 @@ async function httpLogin(userData) {
     const response = await axios.post(`${API_URL}/login`, userData);
 
     if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("RECIPE_MANAGER_USER", JSON.stringify(response.data));
 
       return response.data;
     }
@@ -34,7 +34,7 @@ async function httpLogin(userData) {
 
 // Logout user
 function logout() {
-  localStorage.removeItem("user");
+  localStorage.removeItem("RECIPE_MANAGER_USER");
 }
 
 const requests = {
