@@ -1,0 +1,25 @@
+@import '../../sass/variables';
+
+.cookbookitem {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 1rem;
+  border-radius: .6rem;
+  padding: 0 1.5rem;
+  transition: all ease 100ms;
+
+  &:hover {
+    background-color: $color-primary;
+    color: #FFF;
+    cursor: pointer;
+  }
+
+  &__icon {
+    font-size: $default-font-size;
+  }
+
+  &__name {
+    font-size: $default-font-size;
+  }
+}

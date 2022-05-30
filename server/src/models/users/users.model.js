@@ -16,4 +16,18 @@ async function existUserById(id) {
   return await usersDatabase.findById(id, { hashed_password: 0, __v: 0 });
 }
 
-module.exports = { createUser, existUserByEmail, existUserById };
+async function addRecipeToUser(userId, recipeId) {
+  return await usersDatabase.updateOne({ _id: userId }, { $push: { recipes: recipeId } });
+}
+
+async function addCookbookToUser(userId, cookbookId) {
+  return await usersDatabase.updateOne({ _id: userId }, { $push: { cookbooks: cookbookId } });
+}
+
+module.exports = {
+  createUser,
+  existUserByEmail,
+  existUserById,
+  addRecipeToUser,
+  addCookbookToUser,
+};

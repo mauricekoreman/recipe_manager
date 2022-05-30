@@ -1,0 +1,41 @@
+@import '../../sass/variables';
+
+.homepage-container {
+  background-color: #eee;
+  min-height: 100vh;
+  display: flex;
+}
+
+.homepage-recipes {
+  // background-color: lightblue;
+  padding: 0 7rem;
+  width: 100%;
+
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 7rem;
+
+    & > .recipe-item {
+      // border: 2px solid blue;
+    }
+  }
+
+  &__header {
+    // background-color: cyan;
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+
+    &__icon {
+      font-size: 2.4rem;
+      color: #7C7C7C;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

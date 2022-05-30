@@ -16,54 +16,17 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     cookbooks: {
-      type: [
-        {
-          id: { type: Number, required: true },
-          title: String,
-        },
-      ],
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: "Cookbook",
     },
     recipes: {
-      type: [
-        {
-          img: String,
-          title: { type: String, required: true },
-          people: { type: Number, required: true },
-          ingredients: { type: [String], required: true },
-          utensils: { type: [String], required: true },
-          tags: {
-            kitchen: [String],
-            type: [String],
-            season: [String],
-            diet: [String],
-            main: [String],
-            course: [String],
-          },
-          instructions: [String],
-          notes: String,
-          inCookbooks: [Number],
-        },
-      ],
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: "Recipe",
     },
   },
   {
     timestamps: true,
   }
 );
-
-// const userSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//   },
-//   hashed_password: {
-//     type: String,
-//     required: true,
-//   },
-// });
 
 module.exports = mongoose.model("User", userSchema);
