@@ -16,7 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route index element={<Homepage />} />
+            <Route index path='/*' element={<Homepage />} />
           </Route>
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -29,6 +29,9 @@ function App() {
 }
 
 export default App;
+
+
+
 
 
 

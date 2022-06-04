@@ -1,19 +1,29 @@
 const {
   createCookbook,
-  getAllCookbooks,
+  getCookbooks,
+  updateCookbook,
+  deleteCookbook,
   addRecipeToCookbook,
-  getMyCookbooks,
+  removeRecipeFromCookbook,
+  getCookbookRecipes,
 } = require("../../models/cookbooks/cookbooks.model");
 const { addCookbookToUser } = require("../../models/users/users.model");
 
+// @route   POST /api/cookbooks/
+// @access  private
 async function httpCreateCookbook(req, res) {
-  const { title, createdBy } = req.body;
+  const { title } = req.body;
+  const createdBy = req.user.id;
 
   try {
+    if (!title) {
+      throw new Error("Please add title");
+    }
+
     const response = await createCookbook(title, createdBy);
 
     // add cookbook to user
-    await addCookbookToUser(response.createdBy, response._id);
+    // await addCookbookToUser(response.createdBy, response._id);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -23,9 +33,46 @@ async function httpCreateCookbook(req, res) {
   }
 }
 
-async function httpGetAllCookbooks(req, res) {
+// @route   PUT /api/cookbooks/:id
+// @access  private
+async function httpUpdateCookbook(req, res) {
   try {
-    const response = await getAllCookbooks();
+    const cookbookId = req.params.cookbookId;
+    const title = req.body.title;
+    const userId = req.user.id;
+
+    const updatedCookbook = await updateCookbook(cookbookId, title, userId);
+
+    return res.status(200).json(updatedCookbook);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+// @route   DELETE /api/cookbooks/:id
+// @access  private
+async function httpDeleteCookbook(req, res) {
+  try {
+    const cookbookId = req.params.id;
+    const userId = req.user.id;
+
+    await deleteCookbook(cookbookId, userId);
+
+    return res.status(200).json({ id: cookbookId });
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+// @route   GET /api/cookbooks/
+// @access  private
+async function httpGetCookbooks(req, res) {
+  try {
+    const response = await getCookbooks(req.user.id);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -35,11 +82,14 @@ async function httpGetAllCookbooks(req, res) {
   }
 }
 
+// @route   PATCH /api/cookbooks/:id/addRecipe/:id
+// @access  private
 async function httpAddRecipeToCookbook(req, res) {
-  const { recipeId, cookbookId } = req.body;
+  const { cookbookId, recipeId } = req.params;
+  const userId = req.user.id;
 
   try {
-    const response = await addRecipeToCookbook(cookbookId, recipeId);
+    const response = await addRecipeToCookbook(cookbookId, recipeId, userId);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -49,9 +99,30 @@ async function httpAddRecipeToCookbook(req, res) {
   }
 }
 
-async function httpGetMyCookbooks(req, res) {
+// @route   PATCH /api/cookbooks/:id/removeRecipe/:id
+// @access  private
+async function httpRemoveRecipeFromCookbook(req, res) {
+  const { cookbookId, recipeId } = req.params;
+  const userId = req.user.id;
+
   try {
-    const response = await getMyCookbooks();
+    const response = await removeRecipeFromCookbook(cookbookId, recipeId, userId);
+
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+// @route   GET /api/cookbooks/:id/recipes
+// @access  Public
+async function httpGetCookbookRecipes(req, res) {
+  const { cookbookId } = req.params;
+
+  try {
+    const response = await getCookbookRecipes(cookbookId);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -63,7 +134,10 @@ async function httpGetMyCookbooks(req, res) {
 
 module.exports = {
   httpCreateCookbook,
-  httpGetAllCookbooks,
+  httpGetCookbooks,
+  httpUpdateCookbook,
+  httpDeleteCookbook,
   httpAddRecipeToCookbook,
-  httpGetMyCookbooks,
+  httpRemoveRecipeFromCookbook,
+  httpGetCookbookRecipes,
 };

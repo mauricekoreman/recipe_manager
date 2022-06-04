@@ -7,17 +7,125 @@ async function createCookbook(title, createdBy) {
   return await cookbooksDatabase.create({ title, createdBy });
 }
 
-async function getAllCookbooks() {
-  return await cookbooksDatabase.find({});
+async function updateCookbook(cookbookId, title, userId) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  const user = await usersDatabase.findById(userId);
+
+  // check for user
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Make sure logged in user matches the owner of the cookbook user.
+  if (cookbook.createdBy.toString() !== userId) {
+    throw new Error("User not authorized");
+  }
+
+  return await cookbooksDatabase.findByIdAndUpdate(cookbookId, { title: title }, { new: true });
 }
 
-async function addRecipeToCookbook(cookbookId, recipeId) {
-  return await cookbooksDatabase.updateOne({ _id: cookbookId }, { $push: { recipes: recipeId } });
+async function deleteCookbook(cookbookId, userId) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  const user = await usersDatabase.findById(userId);
+
+  // check for user
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Make sure logged in user matches the owner of the cookbook user.
+  if (cookbook.createdBy.toString() !== userId) {
+    throw new Error("User not authorized");
+  }
+
+  return await cookbook.remove();
 }
 
-async function getMyCookbooks() {
-  // get all cookbook ID's from my user
-  return await usersDatabase.find({}, { cookbooks: 1 }).populate("cookbooks");
+async function getCookbooks(userId) {
+  return await cookbooksDatabase.find({ createdBy: userId });
 }
 
-module.exports = { getAllCookbooks, createCookbook, addRecipeToCookbook, getMyCookbooks };
+async function addRecipeToCookbook(cookbookId, recipeId, userId) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  // Check if cookbook exists
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  const user = await usersDatabase.findById(userId);
+
+  // check for user
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Make sure logged in user matches the owner of the cookbook user.
+  if (cookbook.createdBy.toString() !== userId) {
+    throw new Error("User not authorized");
+  }
+
+  return await cookbooksDatabase.findByIdAndUpdate(
+    cookbookId,
+    { $push: { recipes: recipeId } },
+    { new: true }
+  );
+}
+
+async function removeRecipeFromCookbook(cookbookId, recipeId, userId) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  // Check if cookbook exists
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  const user = await usersDatabase.findById(userId);
+
+  // check for user
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Make sure logged in user matches the owner of the cookbook user.
+  if (cookbook.createdBy.toString() !== userId) {
+    throw new Error("User not authorized");
+  }
+
+  return await cookbooksDatabase.findByIdAndUpdate(
+    cookbookId,
+    { $pull: { recipes: recipeId } },
+    { new: true }
+  );
+}
+
+async function getCookbookRecipes(cookbookId) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  // Check if cookbook exists
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  return await cookbooksDatabase.findById(cookbookId).populate("recipes");
+}
+
+module.exports = {
+  getCookbooks,
+  createCookbook,
+  updateCookbook,
+  deleteCookbook,
+  addRecipeToCookbook,
+  removeRecipeFromCookbook,
+  getCookbookRecipes,
+};

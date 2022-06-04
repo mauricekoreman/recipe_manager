@@ -15,7 +15,6 @@ async function protect(req, res, next) {
 
       // Get user from token
       req.user = await existUserById(decoded.id);
-      console.log(req.user);
 
       next();
     } catch (error) {

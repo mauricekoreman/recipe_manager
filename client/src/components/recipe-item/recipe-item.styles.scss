@@ -1,6 +1,8 @@
 @import '../../sass/variables';
 
 .recipe-item {
+  position: relative;
+  max-width: 300px;
 
   &__img {
     border-radius: 1.8rem;

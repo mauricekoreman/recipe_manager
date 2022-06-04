@@ -51,7 +51,7 @@ async function httpRegisterUser(req, res) {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(400).json({
       error: "Something went wrong...",
     });
@@ -99,9 +99,14 @@ async function httpLoginUser(req, res) {
 // @route   GET api/v1/users/me
 // @access  Private
 async function httpGetMe(req, res) {
-  const user = await existUserById(req.user.id);
-
-  return res.status(200).json(user);
+  try {
+    return res.status(200).json(req.user);
+  } catch (e) {
+    console.error(e.message);
+    return res.status(400).json({
+      error: "Cannot get user data",
+    });
+  }
 }
 
 // Generate JWT

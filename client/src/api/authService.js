@@ -37,10 +37,10 @@ function logout() {
   localStorage.removeItem("RECIPE_MANAGER_USER");
 }
 
-const requests = {
+const authService = {
   httpRegister,
   logout,
   httpLogin,
 };
 
-export default requests;
+export default authService;

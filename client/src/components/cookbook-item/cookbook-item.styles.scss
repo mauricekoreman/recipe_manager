@@ -1,18 +1,28 @@
 @import '../../sass/variables';
 
 .cookbookitem {
-  display: flex;
-  align-items: center;
   list-style: none;
-  gap: 1rem;
-  border-radius: .6rem;
-  padding: 0 1.5rem;
-  transition: all ease 100ms;
+  
+  &__link {
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: .6rem;
+    text-decoration: none;
+    color: #000;
+    transition: all ease 10ms;
 
-  &:hover {
+    &:hover {
     background-color: $color-primary;
     color: #FFF;
     cursor: pointer;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      color: #FFF;
+    }
   }
 
   &__icon {

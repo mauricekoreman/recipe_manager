@@ -5,12 +5,12 @@ async function createRecipe(recipeData) {
   return await recipesDatabase.create(recipeData);
 }
 
-async function getAllRecipes() {
-  return await recipesDatabase.find({});
+async function getRecipes(userId) {
+  return await recipesDatabase.find({ createdBy: userId });
 }
 
 async function getAllMyRecipes(id) {
   return await usersDatabase.find({ _id: id }, { recipes: 1 }).populate("recipes");
 }
 
-module.exports = { createRecipe, getAllRecipes, getAllMyRecipes };
+module.exports = { createRecipe, getRecipes, getAllMyRecipes };
