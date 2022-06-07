@@ -7,7 +7,7 @@
 }
 
 .homepage-recipes {
-  // background-color: lightblue;
+  position: relative;
   padding: 0 7rem;
   width: 100%;
 
@@ -15,14 +15,9 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 7rem;
-
-    & > .recipe-item {
-      // border: 2px solid blue;
-    }
   }
 
   &__header {
-    // background-color: cyan;
     display: flex;
     justify-content: flex-end;
     gap: 2rem;
@@ -37,5 +32,11 @@
         cursor: pointer;
       }
     }
+  }
+
+  .add-recipe-btn {
+    position: absolute;
+    right: 7rem;
+    bottom: 5rem;
   }
 }

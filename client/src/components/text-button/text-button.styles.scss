@@ -1,0 +1,11 @@
+@import '../../sass/variables';
+
+.text-button {
+  border: none;
+  background: none;
+  font-size: $default-font-size;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

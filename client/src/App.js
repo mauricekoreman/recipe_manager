@@ -7,8 +7,11 @@ import LoginPage from "./pages/auth/loginPage/loginPage.component";
 import RegisterPage from "./pages/auth/registerPage/registerPage.component";
 import NotFoundPage from "./pages/notFoundPage/notFoundPage.component";
 
-import "./sass/_base.scss";
 import PrivateRoute from "./routes/privateRoute.component";
+import RecipesGridContainer from "./components/recipes-grid-container/recipes-grid-container.component";
+import CreateRecipePage from "./pages/createRecipePage/createRecipePage.component";
+
+import "./sass/_base.scss";
 
 function App() {
   return (
@@ -16,7 +19,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route index path='/*' element={<Homepage />} />
+            <Route element={<Homepage />}>
+              <Route path='/:cookbook' element={<RecipesGridContainer />} />
+              <Route index element={<RecipesGridContainer />} />
+            </Route>
+            <Route path='/:cookbook/create-recipe' element={<CreateRecipePage />} />
           </Route>
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -29,6 +36,19 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

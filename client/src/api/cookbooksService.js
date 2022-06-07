@@ -29,6 +29,10 @@ async function httpGetCookbooks(token) {
 
   const response = await axios.get(API_URL, config);
 
+  if (response.data) {
+    localStorage.setItem("RECIPE_MANAGER_COOKBOOKS", JSON.stringify(response.data));
+  }
+
   return response.data;
 }
 

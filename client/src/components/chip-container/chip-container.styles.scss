@@ -1,0 +1,6 @@
+.chip__container {
+  & > *:not(:last-child) {
+    margin-right: .5rem;
+    margin-bottom: .5rem;
+  }
+}

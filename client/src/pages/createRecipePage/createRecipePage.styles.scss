@@ -1,0 +1,18 @@
+@import '../../sass/variables';
+
+.create-recipe__container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.add-input {
+  color: $color-primary;
+  position: absolute;
+  right: 0;
+  margin-top: 2rem;
+  
+  &:hover {
+    color: $color-primary--hover;
+  }
+}

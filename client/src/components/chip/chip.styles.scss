@@ -1,0 +1,26 @@
+@import '../../sass/variables';
+
+.chip {
+  display: inline-flex;
+
+  & > input[type="checkbox"] {
+    display: none;
+  }
+
+  & > input[type="checkbox"] + label {
+    font-size: 1.3rem;
+    background-color: #D9D9D9;
+    border-radius: 100rem;
+    padding: 0.8em 1.5em;
+    transition: 100ms all ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  & > input[type="checkbox"]:checked + label {
+    background-color: $color-primary;
+    color: #FFF;
+  }
+}

@@ -2,8 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import cookbooksService from "../api/cookbooksService";
 
+// Get cookbooks from localstorage
+const cookbooks = JSON.parse(localStorage.getItem("RECIPE_MANAGER_COOKBOOKS"));
+
 const initialState = {
-  cookbooks: [],
+  cookbooks: cookbooks ? cookbooks : [],
   currentCookbook: 0,
   isError: false,
   isSuccess: false,

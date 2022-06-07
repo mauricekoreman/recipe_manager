@@ -1,0 +1,21 @@
+@import '../../sass/variables';
+
+.floating-button {
+  border-radius: 100rem;
+  background-color: $color-primary;
+  border: none;
+  padding: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $color-primary--hover;
+    cursor: pointer;
+  }
+
+  &__icon {
+    font-size: 3rem;
+    color: #FFF;
+  }
+}
