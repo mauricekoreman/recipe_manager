@@ -55,12 +55,13 @@ async function getCookbooks(userId) {
   return await cookbooksDatabase.find({ createdBy: userId });
 }
 
-async function addRecipeToCookbook(cookbookId, recipeId, userId) {
-  const cookbook = await cookbooksDatabase.findById(cookbookId);
+async function addRecipeToCookbooks(cookbooksArr, recipeId, userId) {
+  // const cookbook = await cookbooksDatabase.findById(cookbookId);
+  const cookbooks = await cookbooksDatabase.find({ _id: { $in: cookbooksArr } });
 
   // Check if cookbook exists
-  if (!cookbook) {
-    throw new Error("Cookbook not found");
+  if (!cookbooks) {
+    throw new Error("No cookbooks found");
   }
 
   const user = await usersDatabase.findById(userId);
@@ -71,14 +72,15 @@ async function addRecipeToCookbook(cookbookId, recipeId, userId) {
   }
 
   // Make sure logged in user matches the owner of the cookbook user.
-  if (cookbook.createdBy.toString() !== userId) {
-    throw new Error("User not authorized");
-  }
+  cookbooks.forEach((cookbook) => {
+    if (cookbook.createdBy.toString() !== userId) {
+      throw new Error("User not authorized");
+    }
+  });
 
-  return await cookbooksDatabase.findByIdAndUpdate(
-    cookbookId,
-    { $push: { recipes: recipeId } },
-    { new: true }
+  return await cookbooksDatabase.updateMany(
+    { _id: { $in: cookbooksArr } },
+    { $push: { recipes: recipeId } }
   );
 }
 
@@ -125,7 +127,7 @@ module.exports = {
   createCookbook,
   updateCookbook,
   deleteCookbook,
-  addRecipeToCookbook,
+  addRecipeToCookbooks,
   removeRecipeFromCookbook,
   getCookbookRecipes,
 };

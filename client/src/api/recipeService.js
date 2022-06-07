@@ -15,6 +15,7 @@ async function httpCreateRecipe(recipeData, token) {
 
     return response.data;
   } catch (e) {
+    // console.log(e.response.data.error);
     throw new Error(e.response.data.error);
   }
 }

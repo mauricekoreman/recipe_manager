@@ -45,19 +45,21 @@ export const getCookbooks = createAsyncThunk("cookbooks/get", async (_, thunkAPI
   }
 });
 
-// Getting cookbook recipes
-// export const getCookbookRecipes = createAsyncThunk("cookbookRecipes/get", async (cookbookId, thunkAPI) => {
-//   try {
-//     return await cookbooksService.httpGetCookbookRecipes(cookbookId);
-//   } catch (error) {
-//     const message =
-//       (error.response && error.response.data && error.reponse.data.message) ||
-//       error.message ||
-//       error.toString();
-//     return thunkAPI.rejectWithValue(message);
-//   }
-// })
+// Add recipe to cookbook
+export const addRecipeToCookbook = createAsyncThunk("cookbooks/path", async (data, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await cookbooksService.httpAddRecipeToCookbook(data, token);
+  } catch (error) {
+     const message =
+       (error.response && error.response.data && error.reponse.data.message) ||
+       error.message ||
+       error.toString();
+     return thunkAPI.rejectWithValue(message);
+  }
+})
 
+// NOTE: eigenlijk onnodig. Ik haal de recipes al op bij getCookbooks. Dus alle data staat al in redux...
 export const getCookbookRecipes = async (cookbookId) => {
   try {
     return await cookbooksService.httpGetCookbookRecipes(cookbookId);
@@ -111,15 +113,19 @@ export const cookbooksSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.message = action.payload;
+      })
+      .addCase(addRecipeToCookbook.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addRecipeToCookbook.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(addRecipeToCookbook.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
-    // .addCase(getCookbookRecipes.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(getCookbookRecipes.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.isSuccess = true;
-    //   state.cookbooks.
-    // })
   },
 });
 

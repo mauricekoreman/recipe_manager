@@ -21,32 +21,57 @@ async function httpCreateCookbook(cookbookTitle, token) {
 
 // Getting user cookbooks
 async function httpGetCookbooks(token) {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
-  const response = await axios.get(API_URL, config);
+    const response = await axios.get(API_URL, config);
 
-  if (response.data) {
-    localStorage.setItem("RECIPE_MANAGER_COOKBOOKS", JSON.stringify(response.data));
+    if (response.data) {
+      localStorage.setItem("RECIPE_MANAGER_COOKBOOKS", JSON.stringify(response.data));
+    }
+
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
   }
-
-  return response.data;
 }
 
 // Get cookbook recipes
 async function httpGetCookbookRecipes(cookbookId) {
-  const response = await axios.get(`${API_URL}/${cookbookId}`);
+  try {
+    const response = await axios.get(`${API_URL}/${cookbookId}`);
 
-  return response.data.recipes;
+    return response.data.recipes;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
+// Add recipe to cookbook
+async function httpAddRecipeToCookbook(data, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.patch(`${API_URL}/addRecipeToCookbooks`, data, config);
+    console.log("response: ", response.data);
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
 }
 
 const cookbooksService = {
   httpCreateCookbook,
   httpGetCookbooks,
   httpGetCookbookRecipes,
+  httpAddRecipeToCookbook,
 };
 
 export default cookbooksService;

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import recipeService from "../api/recipeService";
+import { addRecipeToCookbook } from "./cookbooksSlice";
 
 const initialState = {
   isError: false,
@@ -19,6 +20,7 @@ export const createRecipe = createAsyncThunk("recipes/create", async (recipeData
       (error.response && error.response.data && error.reponse.data.message) ||
       error.message ||
       error.toString();
+
     return thunkAPI.rejectWithValue(message);
   }
 });

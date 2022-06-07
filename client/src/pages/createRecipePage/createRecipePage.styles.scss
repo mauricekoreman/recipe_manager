@@ -6,6 +6,17 @@
   padding: 5rem 2rem;
 }
 
+.create-recipe__back-arrow {
+  font-size: 4rem;
+  margin-bottom: 3rem;
+  transition: 100ms color ease;
+
+  &:hover {
+    cursor: pointer;
+    color: $color-primary;
+  }
+}
+
 .add-input {
   color: $color-primary;
   position: absolute;

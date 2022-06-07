@@ -23,6 +23,7 @@ const Homepage = () => {
     async function getRecipes() {
       // Check if the cookbook has any recipes. If true, get retrieve them
       if (cookbooks[currentCookbook]?._id) {
+        // NOTE: eigenlijk onnodig. Ik haal de recipes al op bij getCookbooks. Dus alle data staat al in redux...
         const recipes = await cookbooksService.httpGetCookbookRecipes(
           cookbooks[currentCookbook]._id
         );
