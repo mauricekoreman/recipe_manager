@@ -30,9 +30,9 @@ async function httpGetCookbooks(token) {
 
     const response = await axios.get(API_URL, config);
 
-    if (response.data) {
-      localStorage.setItem("RECIPE_MANAGER_COOKBOOKS", JSON.stringify(response.data));
-    }
+    // if (response.data) {
+    //   localStorage.setItem("RECIPE_MANAGER_COOKBOOKS", JSON.stringify(response.data));
+    // }
 
     return response.data;
   } catch (e) {
@@ -67,11 +67,28 @@ async function httpAddRecipeToCookbook(data, token) {
   }
 }
 
+// Delete cookbook
+async function httpDeleteCookbook(cookbookId, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.delete(`${API_URL}/${cookbookId}`, config);
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 const cookbooksService = {
   httpCreateCookbook,
   httpGetCookbooks,
   httpGetCookbookRecipes,
   httpAddRecipeToCookbook,
+  httpDeleteCookbook,
 };
 
 export default cookbooksService;

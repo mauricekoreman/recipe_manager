@@ -1,7 +1,7 @@
 @import '../../sass/variables';
 
 .homepage-container {
-  background-color: #eee;
+  background-color: #FFF;
   min-height: 100vh;
   display: flex;
 }
@@ -21,8 +21,8 @@
     display: flex;
     justify-content: flex-end;
     gap: 2rem;
-    padding: 2rem 0;
-    margin-bottom: 3rem;
+    padding: 4.5rem 0 0;
+    margin-bottom: 3.5rem;
 
     &__icon {
       font-size: 2.4rem;
@@ -38,5 +38,69 @@
     position: absolute;
     right: 7rem;
     bottom: 5rem;
+  }
+}
+
+.floating-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f3f3f3;
+  padding: 2rem;
+  border-radius: 5px;
+  border: none;
+  box-shadow: .13rem .4rem .6rem rgba(0, 0, 0, 0.269);
+  outline: none;
+
+  & > .floating-menu__button {
+    color: #413e3e;
+    
+    &:hover {
+      color: #f11d1d;
+    }
+  }
+
+  &--homepage {
+    position: absolute;
+    transform: translateX(-20%);
+  }
+}
+
+.modal {
+  padding: 2rem 2.5rem;
+  border-radius: 1rem;
+  background-color: #FFF;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-shadow: .13rem .4rem .6rem rgba(0, 0, 0, 0.269);
+
+  &__header {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  &-button__container {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  &-button--delete {
+    color: red;
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000047;
   }
 }

@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Homepage from "./pages/homepage/homepage.component";
 import LoginPage from "./pages/auth/loginPage/loginPage.component";
-import RegisterPage from "./pages/auth/registerPage/registerPage.component";
+import SettingsPage from "./pages/settingspage/settingspage.component";
 import NotFoundPage from "./pages/notFoundPage/notFoundPage.component";
+import RegisterPage from "./pages/auth/registerPage/registerPage.component";
+import CreateRecipePage from "./pages/createRecipePage/createRecipePage.component";
 
 import PrivateRoute from "./routes/privateRoute.component";
 import RecipesGridContainer from "./components/recipes-grid-container/recipes-grid-container.component";
-import CreateRecipePage from "./pages/createRecipePage/createRecipePage.component";
 
 import "./sass/_base.scss";
 
@@ -24,6 +25,7 @@ function App() {
               <Route index element={<RecipesGridContainer />} />
             </Route>
             <Route path='/:cookbook/create-recipe' element={<CreateRecipePage />} />
+            <Route path='/settings' element={<SettingsPage />} />
           </Route>
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -36,29 +38,4 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

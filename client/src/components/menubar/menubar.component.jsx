@@ -1,21 +1,26 @@
+import { toast } from "react-toastify";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiSettings, FiPlus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
-import { logout } from "../../redux/authSlice";
 import { createCookbook, getCookbooks, reset } from "../../redux/cookbooksSlice";
 
 import Input from "../input/input.component";
 import CookbookItem from "../cookbook-item/cookbook-item.component";
 
 import "./menubar.styles.scss";
-import { useEffect, useState } from "react";
+import TextButton from "../text-button/text-button.component";
 
 const Menubar = () => {
+  const navigate = useNavigate();
   const [cookbookTitle, setCookbookTitle] = useState("");
+  const [addCookbook, setAddCookbook] = useState(false);
+
+  const listRef = useRef();
 
   const dispatch = useDispatch();
-  const { cookbooks, isError, message } = useSelector((state) => state.cookbooks);
+  const { cookbooks, isError, message, isSuccess } = useSelector((state) => state.cookbooks);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -28,37 +33,63 @@ const Menubar = () => {
       toast.error(message);
     }
 
+    if (isSuccess) {
+      setAddCookbook(false);
+    }
+
     dispatch(reset());
-  }, [dispatch, cookbooks, isError, message]);
+  }, [dispatch, cookbooks, isError, message, isSuccess]);
+
+  useEffect(() => {
+    if (addCookbook) {
+      listRef.current.scroll({
+        top: listRef.current.scrollHeight,
+      });
+    }
+  }, [addCookbook]);
 
   // Getting user cookbooks
   useEffect(() => {
+    console.log("getting cookbooks");
     dispatch(getCookbooks());
   }, []);
 
   return (
     <aside className='menubar'>
-      <Input placeholder='Search cookbooks...' />
-      <ul className='cookbooks-list'>
+      <Input className='menubar__search' placeholder='Search cookbooks...' />
+      <ul className='cookbooks-list' ref={listRef}>
         {cookbooks.length &&
           cookbooks.map((cookbook, i) => (
             <CookbookItem key={i} title={cookbook.title} cookbookArrIndex={i} />
           ))}
-      </ul>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          name='cookbook'
-          value={cookbookTitle}
-          onChange={(e) => setCookbookTitle(e.target.value)}
-        />
-        <button type='submit'>Add cookbook</button>
-      </form>
-      <button onClick={() => dispatch(logout())}>Logout!</button>
+        {addCookbook && (
+          <form onSubmit={handleSubmit}>
+            <input
+              type='text'
+              name='cookbook'
+              value={cookbookTitle}
+              onChange={(e) => setCookbookTitle(e.target.value)}
+              className='addCookbook__input'
+            />
+            <button onClick={() => setAddCookbook(false)} className='addCookbook__cancel-btn'>
+              x
+            </button>
+            <button className='addCookbook__add-btn' type='submit'>
+              Add cookbook
+            </button>
+          </form>
+        )}
+      </ul>
       <div className='menubar__icons'>
-        <FiSettings className='menubar__icon menubar__icon--settings' />
-        <FiPlus className='menubar__icon menubar__icon--plus' />
+        <FiSettings
+          className='menubar__icon menubar__icon--settings'
+          onClick={() => navigate("/settings")}
+        />
+        <FiPlus
+          className='menubar__icon menubar__icon--plus'
+          onClick={() => setAddCookbook(true)}
+        />
       </div>
     </aside>
   );

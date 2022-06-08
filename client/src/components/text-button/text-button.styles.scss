@@ -4,6 +4,9 @@
   border: none;
   background: none;
   font-size: $default-font-size;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
   &:hover {
     cursor: pointer;

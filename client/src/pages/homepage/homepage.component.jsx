@@ -1,23 +1,45 @@
+import Modal from "react-modal";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { FiSearch, FiFilter, FiMoreHorizontal, FiTrash2 } from "react-icons/fi";
+
+import ClickAwayListener from "react-click-away-listener";
 
 import Menubar from "../../components/menubar/menubar.component";
+import TextButton from "../../components/text-button/text-button.component";
 import FloatingButton from "../../components/floating-button/floating-button.component";
 
-import { FiSearch, FiFilter } from "react-icons/fi";
-
 import cookbooksService from "../../api/cookbooksService";
-import { useSelector } from "react-redux";
+import { deleteCookbook } from "../../redux/cookbooksSlice";
 
 import "./homepage.styles.scss";
-import { useLocation, useNavigate } from "react-router-dom";
+
+Modal.setAppElement("#root");
 
 const Homepage = () => {
-  const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const [recipes, setRecipes] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showFloatMenu, setShowFloatMenu] = useState(false);
+
+  const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
+
+  function toggleModal() {
+    setModalIsOpen((prevState) => !prevState);
+  }
+
+  function toggleFloatMenu() {
+    setShowFloatMenu((prevState) => !prevState);
+  }
+
+  function handleDeleteCookbook() {
+    const cookbookId = cookbooks[currentCookbook]._id;
+    dispatch(deleteCookbook(cookbookId));
+    toggleModal();
+  }
 
   useEffect(() => {
     async function getRecipes() {
@@ -36,7 +58,6 @@ const Homepage = () => {
   }, [currentCookbook]);
 
   function addRecipe() {
-    console.log(location.pathname);
     navigate(`${location.pathname}/create-recipe`);
   }
 
@@ -47,11 +68,45 @@ const Homepage = () => {
         <div className='homepage-recipes__header'>
           <FiSearch className='homepage-recipes__header__icon' />
           <FiFilter className='homepage-recipes__header__icon' />
+          <FiMoreHorizontal className='homepage-recipes__header__icon' onClick={toggleFloatMenu} />
+
+          {showFloatMenu && (
+            <ClickAwayListener onClickAway={toggleFloatMenu}>
+              <div className='floating-menu floating-menu--homepage'>
+                <TextButton
+                  className='floating-menu__button'
+                  text={"Delete cookbook"}
+                  icon={<FiTrash2 />}
+                  onClick={toggleModal}
+                />
+              </div>
+            </ClickAwayListener>
+          )}
         </div>
 
         <Outlet context={recipes} />
         <FloatingButton onClick={addRecipe} className='add-recipe-btn' />
       </div>
+      <Modal
+        className={"modal"}
+        overlayClassName={"modal__overlay"}
+        isOpen={modalIsOpen}
+        onRequestClose={toggleModal}
+      >
+        <h2 className='modal__header'>Are you sure you want to delete this cookbook?</h2>
+        <div className='modal-button__container'>
+          <TextButton
+            text={"Delete"}
+            className='modal-button modal-button--delete'
+            onClick={handleDeleteCookbook}
+          />
+          <TextButton
+            text={"Cancel"}
+            className='modal-button modal-button--cancel'
+            onClick={toggleModal}
+          />
+        </div>
+      </Modal>
     </main>
   );
 };

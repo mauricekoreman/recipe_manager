@@ -55,7 +55,7 @@ async function httpUpdateCookbook(req, res) {
 // @access  private
 async function httpDeleteCookbook(req, res) {
   try {
-    const cookbookId = req.params.id;
+    const cookbookId = req.params.cookbookId;
     const userId = req.user.id;
 
     await deleteCookbook(cookbookId, userId);

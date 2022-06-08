@@ -3,10 +3,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import cookbooksService from "../api/cookbooksService";
 
 // Get cookbooks from localstorage
-const cookbooks = JSON.parse(localStorage.getItem("RECIPE_MANAGER_COOKBOOKS"));
+// const cookbooks = JSON.parse(localStorage.getItem("RECIPE_MANAGER_COOKBOOKS"));
 
 const initialState = {
-  cookbooks: cookbooks ? cookbooks : [],
+  cookbooks: [],
   currentCookbook: 0,
   isError: false,
   isSuccess: false,
@@ -51,13 +51,26 @@ export const addRecipeToCookbook = createAsyncThunk("cookbooks/path", async (dat
     const token = thunkAPI.getState().auth.user.token;
     return await cookbooksService.httpAddRecipeToCookbook(data, token);
   } catch (error) {
-     const message =
-       (error.response && error.response.data && error.reponse.data.message) ||
-       error.message ||
-       error.toString();
-     return thunkAPI.rejectWithValue(message);
+    const message =
+      (error.response && error.response.data && error.reponse.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-})
+});
+
+export const deleteCookbook = createAsyncThunk("cookbooks/delete", async (cookbookId, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await cookbooksService.httpDeleteCookbook(cookbookId, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.reponse.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 // NOTE: eigenlijk onnodig. Ik haal de recipes al op bij getCookbooks. Dus alle data staat al in redux...
 export const getCookbookRecipes = async (cookbookId) => {
@@ -122,6 +135,19 @@ export const cookbooksSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(addRecipeToCookbook.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteCookbook.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCookbook.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.cookbooks = state.cookbooks.filter((cookbook) => cookbook._id !== action.payload.id);
+      })
+      .addCase(deleteCookbook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
