@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="918" height="918" viewBox="0 0 918 918">
+  <g id="noodles-with-bg" transform="translate(931 -1607)">
+    <rect id="Rectangle_64" data-name="Rectangle 64" width="918" height="918" transform="translate(-931 1607)" fill="#e4e4e4"/>
+    <g id="noodles-icon" transform="translate(-339.71 55.064)">
+      <g id="Noodles">
+        <path id="Path_285" data-name="Path 285" d="M-91.558,2074.071s21.05-35.423,56.347-19.735,40.527,12.637,67.545,0,52.293-18.074,78.875,6.433,57.958.1,62.315-2.511c3.216-1.93,22.462-17.2,49.242-6.972,9.17,3.5,27.731,7.024,35.38,20.039" transform="translate(-211 -65.04)" fill="none" stroke="#707070" stroke-width="12"/>
+        <path id="Path_284" data-name="Path 284" d="M-81.608,2052.1s1.622-18.85,32.2-5.261,35.1,12.456,58.506,1.51,48.315-24.535,74.737,6.04c3.62,4.189,6.523,4.752,6.523,4.752s46.245-.886,49.5-2.841c3.231-1.938,38.221-29.378,64.794-9.386,4.192,3.152,4.12,3.509,4.12,3.509" transform="translate(-189.242 -37.427)" fill="none" stroke="#707070" stroke-width="12"/>
+      </g>
+      <g id="Chopsticks" transform="translate(-6 -54.75)">
+        <line id="Line_21" data-name="Line 21" y1="149" x2="118" transform="translate(-84.5 1907.25)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="12"/>
+        <line id="Line_22" data-name="Line 22" y1="108" x2="153" transform="translate(-82.5 1946.25)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="12"/>
+      </g>
+      <g id="Steam" transform="translate(0 -47)">
+        <path id="Path_278" data-name="Path 278" d="M0,0S-13.132,9.674-10.537,27.134,7.745,53.373,10.38,69.84,0,93,0,93" transform="translate(-172.87 1864.25)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="12"/>
+        <path id="Path_279" data-name="Path 279" d="M0,0S-13.132,9.674-10.537,27.134,7.745,53.373,10.38,69.84,0,93,0,93" transform="translate(-129.985 1864.25)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="12"/>
+        <path id="Path_280" data-name="Path 280" d="M0,0S-13.132,9.674-10.537,27.134,7.745,53.373,10.38,69.84,0,93,0,93" transform="translate(-90.985 1864.25)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="12"/>
+      </g>
+      <g id="tray">
+        <g id="Ellipse_18" data-name="Ellipse 18" transform="translate(-338 1949.75)" fill="none" stroke="#707070" stroke-width="12">
+          <ellipse cx="206" cy="39" rx="206" ry="39" stroke="none"/>
+          <ellipse cx="206" cy="39" rx="200" ry="33" fill="none"/>
+        </g>
+        <path id="Path_281" data-name="Path 281" d="M402.159,120c0,104.311-90.026,188.872-201.079,188.872S0,224.311,0,120" transform="translate(-332.932 1868.75)" fill="none" stroke="#707070" stroke-width="12"/>
+      </g>
+    </g>
+  </g>
+</svg>

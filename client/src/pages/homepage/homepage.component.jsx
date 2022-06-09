@@ -10,8 +10,7 @@ import Menubar from "../../components/menubar/menubar.component";
 import TextButton from "../../components/text-button/text-button.component";
 import FloatingButton from "../../components/floating-button/floating-button.component";
 
-import cookbooksService from "../../api/cookbooksService";
-import { deleteCookbook } from "../../redux/cookbooksSlice";
+import { deleteCookbook, getCookbookRecipes, getUserRecipes } from "../../redux/cookbooksSlice";
 
 import "./homepage.styles.scss";
 
@@ -21,11 +20,12 @@ const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [recipes, setRecipes] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
 
-  const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
+  const { cookbooks, currentCookbook, currentCookbookRecipes } = useSelector(
+    (state) => state.cookbooks
+  );
 
   function toggleModal() {
     setModalIsOpen((prevState) => !prevState);
@@ -39,18 +39,15 @@ const Homepage = () => {
     const cookbookId = cookbooks[currentCookbook]._id;
     dispatch(deleteCookbook(cookbookId));
     toggleModal();
+    navigate("/");
   }
 
   useEffect(() => {
     async function getRecipes() {
-      // Check if the cookbook has any recipes. If true, get retrieve them
       if (cookbooks[currentCookbook]?._id) {
-        // NOTE: eigenlijk onnodig. Ik haal de recipes al op bij getCookbooks. Dus alle data staat al in redux...
-        const recipes = await cookbooksService.httpGetCookbookRecipes(
-          cookbooks[currentCookbook]._id
-        );
-
-        setRecipes(recipes);
+        dispatch(getCookbookRecipes(cookbooks[currentCookbook]._id));
+      } else if (currentCookbook === null) {
+        dispatch(getUserRecipes());
       }
     }
 
@@ -68,7 +65,12 @@ const Homepage = () => {
         <div className='homepage-recipes__header'>
           <FiSearch className='homepage-recipes__header__icon' />
           <FiFilter className='homepage-recipes__header__icon' />
-          <FiMoreHorizontal className='homepage-recipes__header__icon' onClick={toggleFloatMenu} />
+          {currentCookbook !== null && (
+            <FiMoreHorizontal
+              className='homepage-recipes__header__icon'
+              onClick={toggleFloatMenu}
+            />
+          )}
 
           {showFloatMenu && (
             <ClickAwayListener onClickAway={toggleFloatMenu}>
@@ -84,7 +86,7 @@ const Homepage = () => {
           )}
         </div>
 
-        <Outlet context={recipes} />
+        <Outlet context={currentCookbookRecipes} />
         <FloatingButton onClick={addRecipe} className='add-recipe-btn' />
       </div>
       <Modal

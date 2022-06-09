@@ -24,8 +24,4 @@ cookbooksRouter.route("/:cookbookId/removeRecipe/:recipeId").patch(protect, http
 
 // cookbooksRouter.route('/:id/recipe/:recipeId').delete(protect, httpDeleteRecipeFromCookbook).post(protect, httpAddRecipeToCookbook);
 
-// TODO
-// cookbooksRouter.get("/myCookbooks", httpGetMyCookbooks);
-// cookbooksRouter.post("/addRecipeToCookbook", httpAddRecipeToCookbook);
-
 module.exports = cookbooksRouter;

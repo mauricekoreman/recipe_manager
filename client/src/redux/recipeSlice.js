@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import recipeService from "../api/recipeService";
-import { addRecipeToCookbook } from "./cookbooksSlice";
 
 const initialState = {
   isError: false,

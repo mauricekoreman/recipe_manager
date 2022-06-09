@@ -7,7 +7,6 @@ const {
   removeRecipeFromCookbook,
   getCookbookRecipes,
 } = require("../../models/cookbooks/cookbooks.model");
-const { addCookbookToUser } = require("../../models/users/users.model");
 
 // @route   POST /api/cookbooks/
 // @access  private
@@ -21,9 +20,6 @@ async function httpCreateCookbook(req, res) {
     }
 
     const response = await createCookbook(title, createdBy);
-
-    // add cookbook to user
-    // await addCookbookToUser(response.createdBy, response._id);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -59,6 +55,8 @@ async function httpDeleteCookbook(req, res) {
     const userId = req.user.id;
 
     await deleteCookbook(cookbookId, userId);
+
+    // TODO: Now the cookbook must also be deleted from user cookbooks
 
     return res.status(200).json({ id: cookbookId });
   } catch (e) {

@@ -7,7 +7,7 @@ import { setCurrentCookbook } from "../../redux/cookbooksSlice";
 
 import "./cookbook-item.styles.scss";
 
-const CookbookItem = ({ title, cookbookArrIndex }) => {
+const CookbookItem = ({ title, cookbookArrIndex, allRecipes = false }) => {
   const linkTitle = title.split(" ").join("-");
   const dispatch = useDispatch();
 

@@ -8,6 +8,7 @@ import cookbooksService from "../api/cookbooksService";
 const initialState = {
   cookbooks: [],
   currentCookbook: 0,
+  currentCookbookRecipes: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -59,6 +60,7 @@ export const addRecipeToCookbook = createAsyncThunk("cookbooks/path", async (dat
   }
 });
 
+// Delete cookbook
 export const deleteCookbook = createAsyncThunk("cookbooks/delete", async (cookbookId, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.token;
@@ -72,18 +74,36 @@ export const deleteCookbook = createAsyncThunk("cookbooks/delete", async (cookbo
   }
 });
 
-// NOTE: eigenlijk onnodig. Ik haal de recipes al op bij getCookbooks. Dus alle data staat al in redux...
-export const getCookbookRecipes = async (cookbookId) => {
+// get recipes for currently selected cookbook
+export const getCookbookRecipes = createAsyncThunk(
+  "cookbooks/cookbookRecipes",
+  async (cookbookId, thunkAPI) => {
+    try {
+      return await cookbooksService.httpGetCookbookRecipes(cookbookId);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.reponse.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get all the current user's recipes
+export const getUserRecipes = createAsyncThunk("cookbooks/userRecipes/get", async (_, thunkAPI) => {
   try {
-    return await cookbooksService.httpGetCookbookRecipes(cookbookId);
+    const token = thunkAPI.getState().auth.user.token;
+    return await cookbooksService.httpGetUserRecipes(token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.reponse.data.message) ||
       error.message ||
       error.toString();
-    return message;
+
+    return thunkAPI.rejectWithValue(message);
   }
-};
+});
 
 export const cookbooksSlice = createSlice({
   name: "cookbook",
@@ -148,6 +168,32 @@ export const cookbooksSlice = createSlice({
         state.cookbooks = state.cookbooks.filter((cookbook) => cookbook._id !== action.payload.id);
       })
       .addCase(deleteCookbook.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getCookbookRecipes.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCookbookRecipes.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.currentCookbookRecipes = action.payload;
+      })
+      .addCase(getCookbookRecipes.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getUserRecipes.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUserRecipes.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.currentCookbookRecipes = action.payload;
+      })
+      .addCase(getUserRecipes.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

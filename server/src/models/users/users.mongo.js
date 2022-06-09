@@ -15,14 +15,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    cookbooks: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Cookbook",
-    },
-    recipes: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Recipe",
-    },
   },
   {
     timestamps: true,

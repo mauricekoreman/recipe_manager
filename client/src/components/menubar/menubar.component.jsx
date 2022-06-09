@@ -10,7 +10,6 @@ import Input from "../input/input.component";
 import CookbookItem from "../cookbook-item/cookbook-item.component";
 
 import "./menubar.styles.scss";
-import TextButton from "../text-button/text-button.component";
 
 const Menubar = () => {
   const navigate = useNavigate();
@@ -58,7 +57,8 @@ const Menubar = () => {
     <aside className='menubar'>
       <Input className='menubar__search' placeholder='Search cookbooks...' />
       <ul className='cookbooks-list' ref={listRef}>
-        {cookbooks.length &&
+        <CookbookItem title={"All recipes"} allRecipes cookbookArrIndex={null} />
+        {cookbooks.length > 0 &&
           cookbooks.map((cookbook, i) => (
             <CookbookItem key={i} title={cookbook.title} cookbookArrIndex={i} />
           ))}

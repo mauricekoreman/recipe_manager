@@ -1,0 +1,20 @@
+.homepage-recipes__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 7rem;
+  padding-bottom: 5rem;
+  margin-top: 4rem;
+}
+
+.homepage-recipes__no-recipes {
+  display: flex;
+  height: 70%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__img {
+    width: 60rem;
+    height: auto;
+  }
+}
