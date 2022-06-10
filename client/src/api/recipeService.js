@@ -19,8 +19,20 @@ async function httpCreateRecipe(recipeData, token) {
   }
 }
 
+// GET recipe
+async function httpGetRecipeById(recipeId) {
+  try {
+    const response = await axios.get(`${API_URL}/${recipeId}`);
+
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 const recipeService = {
   httpCreateRecipe,
+  httpGetRecipeById,
 };
 
 export default recipeService;

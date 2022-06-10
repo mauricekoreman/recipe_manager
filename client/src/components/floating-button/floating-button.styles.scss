@@ -4,18 +4,25 @@
   border-radius: 100rem;
   background-color: $color-primary;
   border: none;
-  padding: 1.4rem;
+  height: 4.5em;
+  width: 4.5em;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  position: fixed;
+  right: 7rem;
+  bottom: 5rem;
+  box-shadow: .1rem .4rem 2rem rgba(0, 0, 0, 0.169);
 
   &:hover {
     background-color: $color-primary--hover;
     cursor: pointer;
   }
 
-  &__icon {
+  & > svg {
     font-size: 3rem;
     color: #FFF;
   }
+
 }

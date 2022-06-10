@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 import RecipeItem from "../recipe-item/recipe-item.component";
 
@@ -8,12 +8,22 @@ import "./recipes-grid-container.styles.scss";
 
 const RecipesGridContainer = () => {
   const recipes = useOutletContext();
+  const navigate = useNavigate();
+
+  function handleRecipeClick(recipeData) {
+    navigate(`./recipe/${recipeData._id}`);
+  }
 
   if (recipes.length > 0) {
     return (
       <div className='homepage-recipes__container'>
         {recipes.map((recipe, i) => (
-          <RecipeItem key={i} title={recipe.title} img={recipe.img} />
+          <RecipeItem
+            key={i}
+            title={recipe.title}
+            img={recipe.img}
+            onClick={() => handleRecipeClick(recipe)}
+          />
         ))}
       </div>
     );

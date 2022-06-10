@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FiSearch, FiFilter, FiMoreHorizontal, FiTrash2 } from "react-icons/fi";
+import { FiSearch, FiFilter, FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
 
 import ClickAwayListener from "react-click-away-listener";
 
@@ -87,7 +87,7 @@ const Homepage = () => {
         </div>
 
         <Outlet context={currentCookbookRecipes} />
-        <FloatingButton onClick={addRecipe} className='add-recipe-btn' />
+        <FloatingButton onClick={addRecipe} icon={<FiPlus />} />
       </div>
       <Modal
         className={"modal"}

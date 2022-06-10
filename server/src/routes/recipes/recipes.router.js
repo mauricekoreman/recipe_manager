@@ -1,6 +1,11 @@
 const express = require("express");
 
-const { httpCreateRecipe, httpGetRecipes } = require("./recipes.controller");
+const {
+  httpCreateRecipe,
+  httpGetRecipes,
+  httpGetRecipeById,
+  httpUpdateRecipe,
+} = require("./recipes.controller");
 
 const recipesRouter = express.Router();
 
@@ -8,5 +13,6 @@ const { protect } = require("../../middleware/authMiddleware");
 
 // /recipes/
 recipesRouter.route("/").get(protect, httpGetRecipes).post(protect, httpCreateRecipe);
+recipesRouter.route("/:recipeId").get(httpGetRecipeById).patch(protect, httpUpdateRecipe);
 
 module.exports = recipesRouter;

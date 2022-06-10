@@ -8,4 +8,12 @@ async function getRecipes(userId) {
   return await recipesDatabase.find({ createdBy: userId });
 }
 
-module.exports = { createRecipe, getRecipes };
+async function getRecipeById(recipeId) {
+  return await recipesDatabase.findById(recipeId);
+}
+
+async function updateRecipe(recipeId, recipeData) {
+  return await recipesDatabase.findByIdAndUpdate(recipeId, recipeData, { new: true });
+}
+
+module.exports = { createRecipe, getRecipes, getRecipeById, updateRecipe };

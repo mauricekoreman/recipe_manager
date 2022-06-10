@@ -29,7 +29,7 @@ async function httpCreateCookbook(req, res) {
   }
 }
 
-// @route   PUT /api/cookbooks/:id
+// @route   PATCH /api/cookbooks/:id
 // @access  private
 async function httpUpdateCookbook(req, res) {
   try {

@@ -1,10 +1,8 @@
-import { FiPlus } from "react-icons/fi";
-
 import "./floating-button.styles.scss";
 
-const FloatingButton = ({ className, onClick }) => (
+const FloatingButton = ({ className, onClick, icon }) => (
   <button onClick={onClick} className={`${className} floating-button`}>
-    <FiPlus className='floating-button__icon' />
+    {icon}
   </button>
 );
 

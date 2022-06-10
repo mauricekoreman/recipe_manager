@@ -5,6 +5,10 @@
   max-width: 300px;
   aspect-ratio: 1 / 1;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &__img {
     border-radius: 1.8rem;
     width: 100%;

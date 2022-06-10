@@ -13,6 +13,7 @@ import PrivateRoute from "./routes/privateRoute.component";
 import RecipesGridContainer from "./components/recipes-grid-container/recipes-grid-container.component";
 
 import "./sass/_base.scss";
+import ReadRecipePage from "./pages/readRecipePage/readRecipePage.component";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
               <Route path='/:cookbook' element={<RecipesGridContainer />} />
               <Route index element={<RecipesGridContainer />} />
             </Route>
+            <Route path='/:cookbook/recipe/:recipeId' element={<ReadRecipePage />} />
+            <Route path='/:cookbook/recipe/:recipeId/edit' element={<CreateRecipePage />} />
             <Route path='/:cookbook/create-recipe' element={<CreateRecipePage />} />
             <Route path='/settings' element={<SettingsPage />} />
           </Route>
@@ -38,4 +41,7 @@ function App() {
 }
 
 export default App;
+
+
+
 
