@@ -47,10 +47,28 @@ async function httpUpdateRecipe(recipeData, recipeId, token) {
   }
 }
 
+// Delete recipe
+async function httpDeleteRecipe(recipeId, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.delete(`${API_URL}/${recipeId}`, config);
+
+    return response.data;
+  } catch (e) { 
+    throw new Error(e.response.data.error);
+  }
+}
+
 const recipeService = {
   httpGetRecipeById,
   httpCreateRecipe,
   httpUpdateRecipe,
+  httpDeleteRecipe,
 };
 
 export default recipeService;

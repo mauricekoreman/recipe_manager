@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getTags } from "../../redux/tagsSlice";
-import { createRecipe, updateRecipe, reset } from "../../redux/recipeSlice";
+import { createRecipe, updateRecipe, deleteRecipe, reset } from "../../redux/recipeSlice";
 import { addRecipeToCookbook } from "../../redux/cookbooksSlice";
 
 import Input from "../../components/input/input.component";
@@ -16,15 +16,18 @@ import PrimaryButton from "../../components/primary-button/primary-button.compon
 import ChipContainer from "../../components/chip-container/chip-container.component";
 
 import "./createRecipePage.styles.scss";
+import TextButton from "../../components/text-button/text-button.component";
 
 const CreateRecipePage = ({ updateExistingRecipe }) => {
-  let { recipeId } = useParams();
+  let { recipeId, cookbook } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const { cookbooks } = useSelector((state) => state.cookbooks);
-  const { isError, isSuccess, message } = useSelector((state) => state.recipes);
+  const { isError, isSuccess, deleteRecipeSuccess, message } = useSelector(
+    (state) => state.recipes
+  );
   const { kitchen, type, season, diet, main, course } = useSelector((state) => state.tags);
 
   const [selectedCookbooks, setSelectedCookbooks] = useState([]);
@@ -77,8 +80,12 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       navigate(-1);
     }
 
+    if (deleteRecipeSuccess) {
+      navigate(`/${cookbook}`);
+    }
+
     dispatch(reset());
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, deleteRecipeSuccess]);
 
   function onRecipeChange(updatedArr, category, newEl) {
     if (newEl) {
@@ -155,6 +162,10 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         );
       }
     }
+  }
+
+  async function submitDeleteRecipe() {
+    dispatch(deleteRecipe(recipeId));
   }
 
   return (
@@ -272,6 +283,16 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       </section>
 
       <PrimaryButton type='button' onClick={onSubmit} text={"Save recipe"} />
+      {updateExistingRecipe && (
+        <div className='delete-recipe'>
+          <p>OR</p>
+          <TextButton
+            onClick={submitDeleteRecipe}
+            className='delete-recipe__btn'
+            text={"Delete recipe..."}
+          />
+        </div>
+      )}
     </article>
   );
 };

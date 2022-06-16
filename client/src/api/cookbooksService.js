@@ -76,7 +76,6 @@ async function httpAddRecipeToCookbook(data, token) {
       },
     };
     const response = await axios.patch(`${API_URL}/addRecipeToCookbooks`, data, config);
-    console.log("response: ", response.data);
     return response.data;
   } catch (e) {
     throw new Error(e.response.data.error);

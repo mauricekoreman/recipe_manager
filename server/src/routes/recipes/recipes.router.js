@@ -1,10 +1,11 @@
 const express = require("express");
 
 const {
-  httpCreateRecipe,
   httpGetRecipes,
   httpGetRecipeById,
+  httpCreateRecipe,
   httpUpdateRecipe,
+  httpDeleteRecipe,
 } = require("./recipes.controller");
 
 const recipesRouter = express.Router();
@@ -20,6 +21,6 @@ recipesRouter
   .route("/:recipeId")
   .get(httpGetRecipeById)
   .patch(protect, httpUpdateRecipe)
-  // .delete(protect, httpDeleteRecipe);
+  .delete(protect, httpDeleteRecipe);
 
 module.exports = recipesRouter;

@@ -14,8 +14,10 @@ async function updateCookbook(cookbookId, title, userId) {
     throw new Error("Cookbook not found");
   }
 
+  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
   const user = await usersDatabase.findById(userId);
 
+  // NOTE: same as above
   // check for user
   if (!user) {
     throw new Error("User not found");
@@ -36,6 +38,7 @@ async function deleteCookbook(cookbookId, userId) {
     throw new Error("Cookbook not found");
   }
 
+  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
   const user = await usersDatabase.findById(userId);
 
   // check for user
@@ -64,6 +67,7 @@ async function addRecipeToCookbooks(cookbooksArr, recipeId, userId) {
     throw new Error("No cookbooks found");
   }
 
+  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
   const user = await usersDatabase.findById(userId);
 
   // check for user
@@ -92,6 +96,7 @@ async function removeRecipeFromCookbook(cookbookId, recipeId, userId) {
     throw new Error("Cookbook not found");
   }
 
+  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
   const user = await usersDatabase.findById(userId);
 
   // check for user

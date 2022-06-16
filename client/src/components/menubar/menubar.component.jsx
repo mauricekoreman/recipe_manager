@@ -49,7 +49,6 @@ const Menubar = () => {
 
   // Getting user cookbooks
   useEffect(() => {
-    console.log("getting cookbooks");
     dispatch(getCookbooks());
   }, []);
 

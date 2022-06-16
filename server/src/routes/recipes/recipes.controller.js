@@ -3,15 +3,17 @@ const {
   getRecipes,
   getRecipeById,
   updateRecipe,
+  deleteRecipe,
 } = require("../../models/recipes/recipes.model");
-
-const mongoose = require("mongoose");
 
 // @route   GET /api/recipes/
 // @access  private
 async function httpGetRecipes(req, res) {
+  const userId = req.user.id;
+  const titleSearch = req.query.title || "";
+
   try {
-    const response = await getRecipes(req.user.id);
+    const response = await getRecipes(userId, titleSearch);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -100,4 +102,27 @@ async function httpUpdateRecipe(req, res) {
   }
 }
 
-module.exports = { httpCreateRecipe, httpGetRecipes, httpGetRecipeById, httpUpdateRecipe };
+// @route   DELETE /api/recipes/:recipeId
+// @access  private
+async function httpDeleteRecipe(req, res) {
+  const { recipeId } = req.params;
+  const currentUser = req.user.id;
+
+  try {
+    const response = await deleteRecipe(recipeId, currentUser);
+
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+module.exports = {
+  httpGetRecipes,
+  httpGetRecipeById,
+  httpCreateRecipe,
+  httpUpdateRecipe,
+  httpDeleteRecipe,
+};

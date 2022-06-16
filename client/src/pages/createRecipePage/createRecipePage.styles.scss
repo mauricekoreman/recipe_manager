@@ -27,3 +27,16 @@
     color: $color-primary--hover;
   }
 }
+
+.delete-recipe {
+  display: grid;
+  place-items: center;
+
+  & > p {
+    font-size: $default-font-size;
+  }
+
+  &__btn {
+    color: red;
+  }
+}

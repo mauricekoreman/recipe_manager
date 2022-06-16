@@ -13,6 +13,7 @@ import FloatingButton from "../../components/floating-button/floating-button.com
 import { deleteCookbook, getCookbookRecipes, getUserRecipes } from "../../redux/cookbooksSlice";
 
 import "./homepage.styles.scss";
+import Input from "../../components/input/input.component";
 
 Modal.setAppElement("#root");
 
@@ -63,7 +64,8 @@ const Homepage = () => {
       <Menubar />
       <div className='homepage-recipes'>
         <div className='homepage-recipes__header'>
-          <FiSearch className='homepage-recipes__header__icon' />
+          <Input className='homepage-recipes__search' placeholder='Search recipes...' />
+          {/* <FiSearch className='homepage-recipes__header__icon' /> */}
           <FiFilter className='homepage-recipes__header__icon' />
           {currentCookbook !== null && (
             <FiMoreHorizontal

@@ -5,6 +5,7 @@ import recipeService from "../api/recipeService";
 const initialState = {
   isError: false,
   isSuccess: false,
+  deleteRecipeSuccess: false,
   isLoading: false,
   message: "",
 };
@@ -41,6 +42,20 @@ export const updateRecipe = createAsyncThunk("recipes/update", async (recipeData
 });
 
 // Delete recipe
+export const deleteRecipe = createAsyncThunk("recipes/delete", async (recipeId, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+
+    return await recipeService.httpDeleteRecipe(recipeId, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.reponse.data.message) ||
+      error.message ||
+      error.toString();
+
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 export const recipeSlice = createSlice({
   name: "recipe",
@@ -50,6 +65,7 @@ export const recipeSlice = createSlice({
       state.isError = false;
       state.isLoading = false;
       state.isSuccess = false;
+      state.deleteRecipeSuccess = false;
       state.message = "";
     },
   },
@@ -76,6 +92,19 @@ export const recipeSlice = createSlice({
         state.message = "Recipe updated!";
       })
       .addCase(updateRecipe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteRecipe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteRecipe.fulfilled, (state) => {
+        state.isLoading = false;
+        state.deleteRecipeSuccess = true;
+        state.message = "Recipe deleted!";
+      })
+      .addCase(deleteRecipe.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
