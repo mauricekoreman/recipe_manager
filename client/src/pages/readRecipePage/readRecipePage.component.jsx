@@ -49,7 +49,7 @@ const ReadRecipePage = () => {
   }
 
   function handleEditRecipeBtn() {
-    navigate("./edit");
+    navigate("./edit", { state: { recipeData } });
   }
 
   return (

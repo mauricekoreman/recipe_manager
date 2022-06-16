@@ -9,7 +9,7 @@ async function getRecipes(userId) {
 }
 
 async function getRecipeById(recipeId) {
-  return await recipesDatabase.findById(recipeId);
+  return await recipesDatabase.findById(recipeId, { __v: 0 });
 }
 
 async function updateRecipe(recipeId, recipeData) {

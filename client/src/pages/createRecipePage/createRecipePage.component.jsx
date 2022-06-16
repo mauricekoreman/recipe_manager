@@ -2,11 +2,11 @@ import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getTags } from "../../redux/tagsSlice";
-import { createRecipe, reset } from "../../redux/recipeSlice";
+import { createRecipe, updateRecipe, reset } from "../../redux/recipeSlice";
 import { addRecipeToCookbook } from "../../redux/cookbooksSlice";
 
 import Input from "../../components/input/input.component";
@@ -17,12 +17,16 @@ import ChipContainer from "../../components/chip-container/chip-container.compon
 
 import "./createRecipePage.styles.scss";
 
-const CreateRecipePage = () => {
+const CreateRecipePage = ({ updateExistingRecipe }) => {
+  let { recipeId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { cookbooks } = useSelector((state) => state.cookbooks);
   const { isError, isSuccess, message } = useSelector((state) => state.recipes);
   const { kitchen, type, season, diet, main, course } = useSelector((state) => state.tags);
+
   const [selectedCookbooks, setSelectedCookbooks] = useState([]);
   const [recipeData, setRecipeData] = useState({
     img: "",
@@ -47,6 +51,21 @@ const CreateRecipePage = () => {
   useEffect(() => {
     // get all available tags from back-end for display
     dispatch(getTags());
+
+    if (location.state?.recipeData) {
+      const lr = location.state.recipeData;
+
+      setRecipeData(() => ({
+        img: lr.img,
+        title: lr.title,
+        servings: lr.servings,
+        ingredients: lr.ingredients.map((el) => ({ text: el, id: nanoid() })),
+        utensils: lr.utensils.map((el) => ({ text: el, id: nanoid() })),
+        instructions: lr.utensils.map((el) => ({ text: el, id: nanoid() })),
+        notes: [{ text: lr.notes, id: nanoid() }],
+        tags: lr.tags,
+      }));
+    }
   }, []);
 
   useEffect(() => {
@@ -122,12 +141,19 @@ const CreateRecipePage = () => {
       tags,
     };
 
-    const createdRecipe = await dispatch(createRecipe(recipeDataSubmit));
+    // Check if this page is updating an existing recipe or creating a new one.
+    if (updateExistingRecipe === true) {
+      // const updatedRecipe = await dispatch()
+      dispatch(updateRecipe({ data: recipeDataSubmit, id: recipeId }));
+    } else {
+      const createdRecipe = await dispatch(createRecipe(recipeDataSubmit));
 
-    if (selectedCookbooks.length > 0) {
-      dispatch(
-        addRecipeToCookbook({ cookbooks: selectedCookbooks, recipeId: createdRecipe.payload._id })
-      );
+      // NOTE: maybe this should be handled in the back-end instead?
+      if (selectedCookbooks.length > 0) {
+        dispatch(
+          addRecipeToCookbook({ cookbooks: selectedCookbooks, recipeId: createdRecipe.payload._id })
+        );
+      }
     }
   }
 
@@ -138,6 +164,7 @@ const CreateRecipePage = () => {
         <h2>Recipe name*</h2>
         <Input
           onChange={(e) => setRecipeData((prevState) => ({ ...prevState, title: e.target.value }))}
+          defaultValue={recipeData.title}
           placeholder={"Recipe name..."}
         />
       </section>
@@ -186,32 +213,62 @@ const CreateRecipePage = () => {
 
       <section className='create-recipe__section'>
         <h2>Kitchen</h2>
-        <ChipContainer onCheck={onCheck} chipArr={kitchen} name='kitchen' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.kitchen}
+          chipArr={kitchen}
+          name='kitchen'
+        />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Type</h2>
-        <ChipContainer onCheck={onCheck} chipArr={type} name='type' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.type}
+          chipArr={type}
+          name='type'
+        />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Season</h2>
-        <ChipContainer onCheck={onCheck} chipArr={season} name='season' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.season}
+          chipArr={season}
+          name='season'
+        />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Diet</h2>
-        <ChipContainer onCheck={onCheck} chipArr={diet} name='diet' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.diet}
+          chipArr={diet}
+          name='diet'
+        />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Main</h2>
-        <ChipContainer onCheck={onCheck} chipArr={main} name='main' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.main}
+          chipArr={main}
+          name='main'
+        />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Course</h2>
-        <ChipContainer onCheck={onCheck} chipArr={course} name='course' />
+        <ChipContainer
+          onCheck={onCheck}
+          checkedArr={recipeData.tags.course}
+          chipArr={course}
+          name='course'
+        />
       </section>
 
       <PrimaryButton type='button' onClick={onSubmit} text={"Save recipe"} />

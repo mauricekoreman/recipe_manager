@@ -26,7 +26,10 @@ function App() {
               <Route index element={<RecipesGridContainer />} />
             </Route>
             <Route path='/:cookbook/recipe/:recipeId' element={<ReadRecipePage />} />
-            <Route path='/:cookbook/recipe/:recipeId/edit' element={<CreateRecipePage />} />
+            <Route
+              path='/:cookbook/recipe/:recipeId/edit'
+              element={<CreateRecipePage updateExistingRecipe />}
+            />
             <Route path='/:cookbook/create-recipe' element={<CreateRecipePage />} />
             <Route path='/settings' element={<SettingsPage />} />
           </Route>
@@ -41,6 +44,9 @@ function App() {
 }
 
 export default App;
+
+
+
 
 
 
