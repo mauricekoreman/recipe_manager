@@ -15,6 +15,8 @@ const Menubar = () => {
   const navigate = useNavigate();
   const [cookbookTitle, setCookbookTitle] = useState("");
   const [addCookbook, setAddCookbook] = useState(false);
+  const [cookbookQuery, setCookbookQuery] = useState("");
+  const [filteredCookbooks, setFilteredCookbooks] = useState([]);
 
   const listRef = useRef();
 
@@ -47,6 +49,14 @@ const Menubar = () => {
     }
   }, [addCookbook]);
 
+  useEffect(() => {
+    const searchedCookbooks = cookbooks.filter((cookbook) =>
+      cookbook.title.toLowerCase().includes(cookbookQuery.toLowerCase())
+    );
+
+    setFilteredCookbooks(searchedCookbooks);
+  }, [cookbookQuery, cookbooks]);
+
   // Getting user cookbooks
   useEffect(() => {
     dispatch(getCookbooks());
@@ -54,11 +64,15 @@ const Menubar = () => {
 
   return (
     <aside className='menubar'>
-      <Input className='menubar__search' placeholder='Search cookbooks...' />
+      <Input
+        className='menubar__search'
+        placeholder='Search cookbooks...'
+        onChange={(e) => setCookbookQuery(e.target.value)}
+      />
       <ul className='cookbooks-list' ref={listRef}>
         <CookbookItem title={"All recipes"} allRecipes cookbookArrIndex={null} />
-        {cookbooks.length > 0 &&
-          cookbooks.map((cookbook, i) => (
+        {filteredCookbooks.length > 0 &&
+          filteredCookbooks.map((cookbook, i) => (
             <CookbookItem key={i} title={cookbook.title} cookbookArrIndex={i} />
           ))}
 
