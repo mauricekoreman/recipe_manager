@@ -24,10 +24,12 @@ const Homepage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
 
+  const [recipes, setRecipes] = useState([]);
+  const [query, setQuery] = useState("");
+
   const { cookbooks, currentCookbook, currentCookbookRecipes } = useSelector(
     (state) => state.cookbooks
   );
-
   function toggleModal() {
     setModalIsOpen((prevState) => !prevState);
   }
@@ -42,6 +44,14 @@ const Homepage = () => {
     toggleModal();
     navigate("/");
   }
+
+  useEffect(() => {
+    const searchedRecipes = currentCookbookRecipes.filter((recipe) =>
+      recipe.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setRecipes(searchedRecipes);
+  }, [query, currentCookbookRecipes]);
 
   useEffect(() => {
     async function getRecipes() {
@@ -64,8 +74,12 @@ const Homepage = () => {
       <Menubar />
       <div className='homepage-recipes'>
         <div className='homepage-recipes__header'>
-          <Input className='homepage-recipes__search' placeholder='Search recipes...' />
-          {/* <FiSearch className='homepage-recipes__header__icon' /> */}
+          <Input
+            className='homepage-recipes__search'
+            placeholder='Search recipes...'
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          {/* <FiSearch className='homepage-recipes__header__icon' onClick={searchRecipe} /> */}
           <FiFilter className='homepage-recipes__header__icon' />
           {currentCookbook !== null && (
             <FiMoreHorizontal
@@ -88,7 +102,7 @@ const Homepage = () => {
           )}
         </div>
 
-        <Outlet context={currentCookbookRecipes} />
+        <Outlet context={recipes} />
         <FloatingButton onClick={addRecipe} icon={<FiPlus />} />
       </div>
       <Modal
