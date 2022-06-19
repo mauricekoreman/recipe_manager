@@ -4,6 +4,8 @@
   background-color: #FFF;
   min-height: 100vh;
   display: flex;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .homepage-recipes {

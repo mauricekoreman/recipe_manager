@@ -1,0 +1,49 @@
+@import '../../sass/variables'; 
+@import '../../sass/mixins'; 
+
+.filter {
+  &__container {
+    position: absolute;
+    top: 0;
+    right: -30rem;
+    width: 30rem;
+    height: 100vh;
+    background-color: $color-grey-light;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem .8rem 1rem 2rem;
+    box-shadow: 0rem 0 .9rem .2rem rgba($color: #000000, $alpha: 0.1);
+    transition: 0.3s all ease-out;
+
+    &--show {
+      right: 0;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    & > h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 600;
+    }
+
+    & > svg {
+      font-size: 2.3rem;
+    }
+  }
+
+  &__filters {
+    @include scrollbar;
+
+    overflow: scroll;
+  }
+}

@@ -10,6 +10,21 @@ const initialState = {
   message: "",
 };
 
+// Get filtered recipes
+export const getFilteredRecipes = createAsyncThunk("recipes/filtered", async (tags, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await recipeService.httpGetFilteredRecipes(tags, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.reponse.data.message) ||
+      error.message ||
+      error.toString();
+
+    return thunkAPI.rejectWithValue(message);
+  }
+})
+
 // Create new recipe
 export const createRecipe = createAsyncThunk("recipes/create", async (recipeData, thunkAPI) => {
   try {
@@ -105,6 +120,19 @@ export const recipeSlice = createSlice({
         state.message = "Recipe deleted!";
       })
       .addCase(deleteRecipe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getFilteredRecipes.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFilteredRecipes.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        console.log("filtered response: ", action.payload);
+      })
+      .addCase(getFilteredRecipes.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

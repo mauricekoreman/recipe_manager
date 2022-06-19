@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FiSearch, FiFilter, FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
+import { FiFilter, FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
 
 import ClickAwayListener from "react-click-away-listener";
 
@@ -14,6 +14,7 @@ import { deleteCookbook, getCookbookRecipes, getUserRecipes } from "../../redux/
 
 import "./homepage.styles.scss";
 import Input from "../../components/input/input.component";
+import FilterMenu from "../../components/filter-menu/filter-menu.component";
 
 Modal.setAppElement("#root");
 
@@ -23,6 +24,7 @@ const Homepage = () => {
   const location = useLocation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState("");
@@ -36,6 +38,10 @@ const Homepage = () => {
 
   function toggleFloatMenu() {
     setShowFloatMenu((prevState) => !prevState);
+  }
+
+  function toggleFilterMenu() {
+    setShowFilterMenu((prevState) => !prevState);
   }
 
   function handleDeleteCookbook() {
@@ -79,8 +85,10 @@ const Homepage = () => {
             placeholder='Search recipes...'
             onChange={(e) => setQuery(e.target.value)}
           />
-          {/* <FiSearch className='homepage-recipes__header__icon' onClick={searchRecipe} /> */}
-          <FiFilter className='homepage-recipes__header__icon' />
+          <FiFilter
+            className='homepage-recipes__header__icon'
+            onClick={toggleFilterMenu}
+          />
           {currentCookbook !== null && (
             <FiMoreHorizontal
               className='homepage-recipes__header__icon'
@@ -105,6 +113,7 @@ const Homepage = () => {
         <Outlet context={recipes} />
         <FloatingButton onClick={addRecipe} icon={<FiPlus />} />
       </div>
+      <FilterMenu show={showFilterMenu} toggle={toggleFilterMenu} />
       <Modal
         className={"modal"}
         overlayClassName={"modal__overlay"}

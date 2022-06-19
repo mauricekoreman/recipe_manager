@@ -4,16 +4,35 @@ const {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  getRecipesWithFilter,
 } = require("../../models/recipes/recipes.model");
 
 // @route   GET /api/recipes/
 // @access  private
 async function httpGetRecipes(req, res) {
   const userId = req.user.id;
+
   const titleSearch = req.query.title || "";
 
   try {
     const response = await getRecipes(userId, titleSearch);
+
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+// @route   GET /api/recipes/
+// @access  private
+async function httpGetRecipesByFilter(req, res) {
+  const userId = req.user.id;
+  const { tags } = req.query;
+
+  try {
+    const response = await getRecipesWithFilter(userId, tags);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -121,6 +140,7 @@ async function httpDeleteRecipe(req, res) {
 
 module.exports = {
   httpGetRecipes,
+  httpGetRecipesByFilter,
   httpGetRecipeById,
   httpCreateRecipe,
   httpUpdateRecipe,

@@ -13,6 +13,28 @@ async function httpGetRecipeById(recipeId) {
   }
 }
 
+async function httpGetFilteredRecipes(tags, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const queryParams = {
+      tags: tags,
+    };
+
+    const params = new URLSearchParams(queryParams);
+
+    const response = await axios.get(`${API_URL}/search?${params}`, config);
+
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 // Create recipe
 async function httpCreateRecipe(recipeData, token) {
   try {
@@ -59,13 +81,14 @@ async function httpDeleteRecipe(recipeId, token) {
     const response = await axios.delete(`${API_URL}/${recipeId}`, config);
 
     return response.data;
-  } catch (e) { 
+  } catch (e) {
     throw new Error(e.response.data.error);
   }
 }
 
 const recipeService = {
   httpGetRecipeById,
+  httpGetFilteredRecipes,
   httpCreateRecipe,
   httpUpdateRecipe,
   httpDeleteRecipe,

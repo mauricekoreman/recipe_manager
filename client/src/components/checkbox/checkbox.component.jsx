@@ -1,15 +1,15 @@
 import "./checkbox.styles.scss";
 
-const Checkbox = ({ name, value, onChange }) => (
+const Checkbox = ({ label, category, value, onChange }) => (
   <label className='checkbox__label'>
     <input
       className='checkbox__input'
       onChange={onChange}
       type='checkbox'
       value={value}
-      name={name}
+      name={category ?? label}
     />
-    {name}
+    {label}
   </label>
 );
 

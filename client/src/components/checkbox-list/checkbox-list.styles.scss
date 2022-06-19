@@ -1,0 +1,12 @@
+@import '../../sass/variables';
+
+.checkbox__show-btn {
+  display: flex;
+  align-items: center;
+  font-size: $default-font-size;
+  gap: 1.3rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

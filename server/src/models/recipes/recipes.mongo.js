@@ -16,26 +16,7 @@ const recipeSchema = new mongoose.Schema({
   },
   ingredients: [String],
   utensils: [String],
-  tags: {
-    kitchen: {
-      type: [String],
-    },
-    type: {
-      type: [String],
-    },
-    season: {
-      type: [String],
-    },
-    diet: {
-      type: [String],
-    },
-    main: {
-      type: [String],
-    },
-    course: {
-      type: [String],
-    },
-  },
+  tags: [String],
   instructions: [String],
   notes: String,
 });

@@ -7,6 +7,13 @@ async function getRecipes(userId, queryText) {
   });
 }
 
+async function getRecipesWithFilter(userId, tags) {
+  return await recipesDatabase.find({
+    createdBy: userId,
+    tags: { $all: tags.split(",") },
+  });
+}
+
 async function getRecipeById(recipeId) {
   return await recipesDatabase.findById(recipeId, { __v: 0 });
 }
@@ -35,6 +42,7 @@ async function deleteRecipe(recipeId, userId) {
 
 module.exports = {
   getRecipes,
+  getRecipesWithFilter,
   getRecipeById,
   createRecipe,
   updateRecipe,

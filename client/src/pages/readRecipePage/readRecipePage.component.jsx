@@ -21,14 +21,7 @@ const ReadRecipePage = () => {
     ingredients: [],
     utensils: [],
     instructions: [],
-    tags: {
-      course: [],
-      kitchen: [],
-      main: [],
-      diet: [],
-      season: [],
-      type: [],
-    },
+    tags: [],
   });
 
   const { title, img, servings, notes, ingredients, utensils, instructions, tags } = recipeData;

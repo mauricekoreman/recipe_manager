@@ -39,14 +39,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
     utensils: [{ text: "", id: nanoid() }],
     instructions: [{ text: "", id: nanoid() }],
     notes: [{ text: "", id: nanoid() }],
-    tags: {
-      kitchen: [],
-      type: [],
-      season: [],
-      diet: [],
-      main: [],
-      course: [],
-    },
+    tags: [],
   });
 
   const { img, title, servings, ingredients, utensils, instructions, notes, tags } = recipeData;
@@ -115,13 +108,13 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   }
 
   function onCheck(e) {
-    let updatedTags = Object.assign({}, recipeData.tags);
+    let updatedTags = [...recipeData.tags];
     let ref = e.target;
 
     if (ref.checked) {
-      updatedTags[ref.name] = [...recipeData.tags[ref.name], ref.value];
+      updatedTags = [...recipeData.tags, ref.value];
     } else if (!ref.checked) {
-      updatedTags[ref.name].splice(recipeData.tags[ref.name].indexOf(ref.value), 1);
+      updatedTags.splice(recipeData.tags.indexOf(ref.value), 1);
     }
 
     setRecipeData((prevState) => ({
@@ -217,7 +210,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         <h2>Add to cookbooks</h2>
         <div className='checkbox__container'>
           {cookbooks.map((el, i) => (
-            <Checkbox onChange={handleCheckedCookbook} name={el.title} value={el._id} key={i} />
+            <Checkbox onChange={handleCheckedCookbook} label={el.title} value={el._id} key={i} />
           ))}
         </div>
       </section>
@@ -226,7 +219,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         <h2>Kitchen</h2>
         <ChipContainer
           onCheck={onCheck}
-          checkedArr={recipeData.tags.kitchen}
+          checkedArr={recipeData.tags}
           chipArr={kitchen}
           name='kitchen'
         />
@@ -234,19 +227,14 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
       <section className='create-recipe__section'>
         <h2>Type</h2>
-        <ChipContainer
-          onCheck={onCheck}
-          checkedArr={recipeData.tags.type}
-          chipArr={type}
-          name='type'
-        />
+        <ChipContainer onCheck={onCheck} checkedArr={recipeData.tags} chipArr={type} name='type' />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Season</h2>
         <ChipContainer
           onCheck={onCheck}
-          checkedArr={recipeData.tags.season}
+          checkedArr={recipeData.tags}
           chipArr={season}
           name='season'
         />
@@ -254,29 +242,19 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
       <section className='create-recipe__section'>
         <h2>Diet</h2>
-        <ChipContainer
-          onCheck={onCheck}
-          checkedArr={recipeData.tags.diet}
-          chipArr={diet}
-          name='diet'
-        />
+        <ChipContainer onCheck={onCheck} checkedArr={recipeData.tags} chipArr={diet} name='diet' />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Main</h2>
-        <ChipContainer
-          onCheck={onCheck}
-          checkedArr={recipeData.tags.main}
-          chipArr={main}
-          name='main'
-        />
+        <ChipContainer onCheck={onCheck} checkedArr={recipeData.tags} chipArr={main} name='main' />
       </section>
 
       <section className='create-recipe__section'>
         <h2>Course</h2>
         <ChipContainer
           onCheck={onCheck}
-          checkedArr={recipeData.tags.course}
+          checkedArr={recipeData.tags}
           chipArr={course}
           name='course'
         />

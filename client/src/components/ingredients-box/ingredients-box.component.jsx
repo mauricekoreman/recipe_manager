@@ -1,6 +1,6 @@
 import "./ingredients-box.styles.scss";
 
-const IngredientsBox = ({ servings = 4, ingredients = [], utensils = [], tags }) => (
+const IngredientsBox = ({ servings = 4, ingredients = [], utensils = [], tags = [] }) => (
   <aside className='ingredients-box'>
     <h2 className='ingredients-box__heading'>Ingredients</h2>
     <p className='ingredients-box__servings'>
@@ -17,13 +17,11 @@ const IngredientsBox = ({ servings = 4, ingredients = [], utensils = [], tags })
       ))}
     </ul>
     <div className='ingredients-box__tags-container'>
-      {Object.entries(tags).map((tagType) =>
-        tagType[1].map((tag) => (
-          <p className='ingredients-box__tags-container__chip' key={tag}>
-            {tag}
-          </p>
-        ))
-      )}
+      {tags.map((tag) => (
+        <p className='ingredients-box__tags-container__chip' key={tag}>
+          {tag}
+        </p>
+      ))}
     </div>
   </aside>
 );
