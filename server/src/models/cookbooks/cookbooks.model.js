@@ -1,5 +1,4 @@
 const cookbooksDatabase = require("./cookbooks.mongo");
-const usersDatabase = require("../users/users.mongo");
 
 async function createCookbook(title, createdBy) {
   // Check if this user already has a cookbook with this name
@@ -20,15 +19,6 @@ async function updateCookbook(cookbookId, title, userId) {
     throw new Error("Cookbook not found");
   }
 
-  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
-  const user = await usersDatabase.findById(userId);
-
-  // NOTE: same as above
-  // check for user
-  if (!user) {
-    throw new Error("User not found");
-  }
-
   // Make sure logged in user matches the owner of the cookbook user.
   if (cookbook.createdBy.toString() !== userId) {
     throw new Error("User not authorized");
@@ -42,14 +32,6 @@ async function deleteCookbook(cookbookId, userId) {
 
   if (!cookbook) {
     throw new Error("Cookbook not found");
-  }
-
-  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
-  const user = await usersDatabase.findById(userId);
-
-  // check for user
-  if (!user) {
-    throw new Error("User not found");
   }
 
   // Make sure logged in user matches the owner of the cookbook user.
@@ -73,14 +55,6 @@ async function addRecipeToCookbooks(cookbooksArr, recipeId, userId) {
     throw new Error("No cookbooks found");
   }
 
-  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
-  const user = await usersDatabase.findById(userId);
-
-  // check for user
-  if (!user) {
-    throw new Error("User not found");
-  }
-
   // Make sure logged in user matches the owner of the cookbook user.
   cookbooks.forEach((cookbook) => {
     if (cookbook.createdBy.toString() !== userId) {
@@ -94,31 +68,24 @@ async function addRecipeToCookbooks(cookbooksArr, recipeId, userId) {
   );
 }
 
-async function removeRecipeFromCookbook(cookbookId, recipeId, userId) {
-  const cookbook = await cookbooksDatabase.findById(cookbookId);
+async function removeRecipeFromCookbooks(cookbooksArr, recipeId, userId) {
+  const cookbooks = await cookbooksDatabase.find({ _id: { $in: cookbooksArr } });
 
   // Check if cookbook exists
-  if (!cookbook) {
-    throw new Error("Cookbook not found");
-  }
-
-  // NOTE: this is not needed. This is already a protected route and if the user is not authorized, they cannot update anyway.
-  const user = await usersDatabase.findById(userId);
-
-  // check for user
-  if (!user) {
-    throw new Error("User not found");
+  if (!cookbooks) {
+    throw new Error("No cookbooks found");
   }
 
   // Make sure logged in user matches the owner of the cookbook user.
-  if (cookbook.createdBy.toString() !== userId) {
-    throw new Error("User not authorized");
-  }
+  cookbooks.forEach((cookbook) => {
+    if (cookbook.createdBy.toString() !== userId) {
+      throw new Error("User not authorized");
+    }
+  });
 
-  return await cookbooksDatabase.findByIdAndUpdate(
-    cookbookId,
-    { $pull: { recipes: recipeId } },
-    { new: true }
+  return await cookbooksDatabase.updateMany(
+    { _id: { $in: cookbooksArr } },
+    { $pull: { recipes: recipeId } }
   );
 }
 
@@ -146,13 +113,18 @@ async function getCookbookRecipesFiltered(cookbookId, tagItems) {
   });
 }
 
+async function getCookbooksWithRecipe(recipeId) {
+  return await cookbooksDatabase.find({ recipes: recipeId }, { _id: 1 });
+}
+
 module.exports = {
   getCookbooks,
   createCookbook,
   updateCookbook,
   deleteCookbook,
   addRecipeToCookbooks,
-  removeRecipeFromCookbook,
+  removeRecipeFromCookbooks,
   getCookbookRecipes,
   getCookbookRecipesFiltered,
+  getCookbooksWithRecipe,
 };

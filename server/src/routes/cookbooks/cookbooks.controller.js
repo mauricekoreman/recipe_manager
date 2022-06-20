@@ -4,7 +4,7 @@ const {
   updateCookbook,
   deleteCookbook,
   addRecipeToCookbooks,
-  removeRecipeFromCookbook,
+  removeRecipeFromCookbooks,
   getCookbookRecipes,
   getCookbookRecipesFiltered,
 } = require("../../models/cookbooks/cookbooks.model");
@@ -81,7 +81,7 @@ async function httpGetCookbooks(req, res) {
   }
 }
 
-// @route   PATCH /api/cookbooks/:id/addRecipe/:id
+// @route   PATCH /api/cookbooks/addRecipeToCookbooks
 // @access  private
 async function httpAddRecipeToCookbooks(req, res) {
   const { cookbooks, recipeId } = req.body;
@@ -98,14 +98,14 @@ async function httpAddRecipeToCookbooks(req, res) {
   }
 }
 
-// @route   PATCH /api/cookbooks/:id/removeRecipe/:id
+// @route   PATCH /api/cookbooks/removeRecipeFromCookbooks
 // @access  private
-async function httpRemoveRecipeFromCookbook(req, res) {
-  const { cookbookId, recipeId } = req.params;
+async function httpRemoveRecipeFromCookbooks(req, res) {
+  const { cookbooks, recipeId } = req.body;
   const userId = req.user.id;
 
   try {
-    const response = await removeRecipeFromCookbook(cookbookId, recipeId, userId);
+    const response = await removeRecipeFromCookbooks(cookbooks, recipeId, userId);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -154,7 +154,7 @@ module.exports = {
   httpUpdateCookbook,
   httpDeleteCookbook,
   httpAddRecipeToCookbooks,
-  httpRemoveRecipeFromCookbook,
+  httpRemoveRecipeFromCookbooks,
   httpGetCookbookRecipes,
   httpGetCookbookRecipesFiltered,
 };

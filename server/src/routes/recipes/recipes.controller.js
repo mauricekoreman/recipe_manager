@@ -6,6 +6,10 @@ const {
   deleteRecipe,
   getRecipesWithFilter,
 } = require("../../models/recipes/recipes.model");
+const {
+  removeRecipeFromCookbooks,
+  getCookbooksWithRecipe,
+} = require("../../models/cookbooks/cookbooks.model");
 
 // @route   GET /api/recipes/
 // @access  private
@@ -73,10 +77,9 @@ async function httpCreateRecipe(req, res) {
       createdBy: createdBy,
     });
 
-    // Create objectID
     const response = await createRecipe(recipeData);
 
-    // TODO: Add recipe to cookbook
+    // TODO: Add recipe to cookbook here instead of front-end.
 
     return res.status(200).json(response);
   } catch (e) {
@@ -129,6 +132,15 @@ async function httpDeleteRecipe(req, res) {
 
   try {
     const response = await deleteRecipe(recipeId, currentUser);
+
+    // Find the cookbooks that the recipe is in
+    const cookbooks = await getCookbooksWithRecipe(recipeId);
+
+    // turn cookbooks into array of id's
+    const cookbooksIdArr = cookbooks.map((cookbook) => cookbook._id);
+
+    // Delete recipe from recipe list in cookbooks
+    await removeRecipeFromCookbooks(cookbooksIdArr, recipeId, currentUser);
 
     return res.status(200).json(response);
   } catch (e) {
