@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Homepage from "./pages/homepage/homepage.component";
 import LoginPage from "./pages/auth/loginPage/loginPage.component";
@@ -22,8 +22,8 @@ function App() {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route element={<Homepage />}>
+              <Route index element={<Navigate to={"/All-recipes"} />} />
               <Route path='/:cookbook' element={<RecipesGridContainer />} />
-              <Route index element={<RecipesGridContainer />} />
             </Route>
             <Route path='/:cookbook/recipe/:recipeId' element={<ReadRecipePage />} />
             <Route
@@ -44,6 +44,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 

@@ -25,6 +25,7 @@
     align-items: center;
     gap: 2rem;
     margin-bottom: 2rem;
+    padding-right: 2rem;
 
     &:hover {
       cursor: pointer;
@@ -38,6 +39,20 @@
 
     & > svg {
       font-size: 2.3rem;
+    }
+
+    & > .filter__apply-btn {
+      border: none;
+      background-color: $color-primary;
+      border-radius: 100px;
+      color: #FFF;
+      padding: 1rem 2rem;
+      margin-left: auto;
+
+      &:hover {
+        background-color: $color-primary--hover;
+        cursor: pointer;
+      }
     }
   }
 

@@ -39,7 +39,7 @@ const SettingsPage = () => {
   return (
     <main className='settings__container'>
       <div className='settings__heading'>
-        <FiArrowLeft onClick={() => navigate("/All-recipes")} />
+        <FiArrowLeft onClick={() => navigate(-1)} />
         <h1>Settings</h1>
       </div>
 

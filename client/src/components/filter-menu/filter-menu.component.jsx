@@ -58,9 +58,7 @@ const FilterMenu = ({ show, toggle }) => {
   return (
     <aside className={`filter__container ${show && "filter__container--show"}`}>
       <div className='filter__heading'>
-        <h1 className='filter__heading' onClick={toggle}>
-          Filter
-        </h1>
+        <h1 onClick={toggle}>Filter</h1>
         <FiChevronRight onClick={toggle} />
         <button className='filter__apply-btn' onClick={applyFilters}>
           Apply

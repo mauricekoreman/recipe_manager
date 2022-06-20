@@ -30,8 +30,7 @@ const RecipesGridContainer = () => {
   } else {
     return (
       <div className='homepage-recipes__no-recipes'>
-        <img className='homepage-recipes__no-recipes__img' src={cookingWoman} />;
-        <h1>Create your first recipe!</h1>
+        <img className='homepage-recipes__no-recipes__img' src={cookingWoman} />;<h1>Such empty</h1>
       </div>
     );
   }
