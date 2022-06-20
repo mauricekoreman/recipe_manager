@@ -1,12 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const {
-  createUser,
-  existUserByEmail,
-  existUserById,
-  getAllMyRecipes,
-} = require("../../models/users/users.model");
+const { createUser, existUserByEmail, updateUser } = require("../../models/users/users.model");
 
 // @desc    Register new user
 // @route   POST api/v1/users/register
@@ -102,9 +97,29 @@ async function httpGetMe(req, res) {
   try {
     return res.status(200).json(req.user);
   } catch (e) {
-    console.error(e.message);
     return res.status(400).json({
       error: "Cannot get user data",
+    });
+  }
+}
+
+// @route   PATCH api/v1/users/me
+// @access  private
+async function httpUpdateUser(req, res) {
+  const userData = req.body;
+  const userId = req.user.id;
+
+  try {
+    const response = await updateUser(userData, userId);
+
+    const userWithToken = Object.assign({}, response._doc, {
+      token: generateToken(userId),
+    });
+
+    return res.status(200).json(userWithToken);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
     });
   }
 }
@@ -116,4 +131,4 @@ function generateToken(id) {
   });
 }
 
-module.exports = { httpRegisterUser, httpLoginUser, httpGetMe };
+module.exports = { httpRegisterUser, httpLoginUser, httpGetMe, httpUpdateUser };

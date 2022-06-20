@@ -192,7 +192,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
           <FiMinusSquare />
         </button>
         <p>
-          Servings: <b>{recipeData.servings}</b>
+          <b>{recipeData.servings}</b> servings
         </p>
         <button
           className='servings__button'

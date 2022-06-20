@@ -44,17 +44,6 @@
   }
 }
 
-.add-input {
-  color: $color-primary;
-  position: absolute;
-  right: 0;
-  margin-top: 2rem;
-  
-  &:hover {
-    color: $color-primary--hover;
-  }
-}
-
 .delete-recipe {
   display: grid;
   place-items: center;

@@ -1,7 +1,7 @@
 import "./text-button.styles.scss";
 
 const TextButton = ({ text, onClick, className, icon }) => (
-  <button className={`${className} text-button`} onClick={onClick}>
+  <button type='button' className={`${className} text-button`} onClick={onClick}>
     {icon}
     {text}
   </button>

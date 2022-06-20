@@ -16,8 +16,13 @@ async function existUserById(id) {
   return await usersDatabase.findById(id, { hashed_password: 0, __v: 0 });
 }
 
+async function updateUser(userdata, userId) {
+  return await usersDatabase.findByIdAndUpdate(userId, userdata, { new: true });
+}
+
 module.exports = {
   createUser,
   existUserByEmail,
   existUserById,
+  updateUser,
 };

@@ -1,0 +1,53 @@
+@import '../../sass/variables';
+
+.settings {
+  &__container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+
+    form > .input {
+      margin-bottom: 3rem;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    
+    & > svg {
+      font-size: 4rem;
+      transition: 100ms color ease;
+
+       &:hover {
+        color: $color-primary--hover;
+        cursor: pointer;
+      }
+    }
+
+    & > h1 {
+      font-size: 4rem;
+    }
+  }
+
+  &__btn {
+    transition: 100ms color ease;
+    color: $color-primary;
+    margin-bottom: 3rem;
+
+    &:hover {
+      color: $color-primary--hover;
+    }
+
+    &--password {
+      margin-top: 6rem;
+    }
+    
+    &--logout {
+      color: grey;
+      margin-bottom: 7rem;
+    }
+  }
+}

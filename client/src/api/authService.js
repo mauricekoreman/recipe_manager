@@ -32,6 +32,27 @@ async function httpLogin(userData) {
   }
 }
 
+// Update user
+async function httpUpdateUser(userData, token) {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.patch(`${API_URL}/me`, userData, config);
+
+    if (response.data) {
+      localStorage.setItem("RECIPE_MANAGER_USER", JSON.stringify(response.data));
+
+      return response.data;
+    }
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 // Logout user
 function logout() {
   localStorage.removeItem("RECIPE_MANAGER_USER");
@@ -39,8 +60,9 @@ function logout() {
 
 const authService = {
   httpRegister,
-  logout,
   httpLogin,
+  httpUpdateUser,
+  logout,
 };
 
 export default authService;
