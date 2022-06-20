@@ -2,7 +2,13 @@ const cookbooksDatabase = require("./cookbooks.mongo");
 const usersDatabase = require("../users/users.mongo");
 
 async function createCookbook(title, createdBy) {
-  // TODO: check if this user already has a cookbook with this name
+  // Check if this user already has a cookbook with this name
+  const cookbook = await cookbooksDatabase.findOne({ createdBy: createdBy, title: title });
+
+  // If cookbook already exists, return an error
+  if (cookbook) {
+    throw new Error("Cookbook with this name already exists");
+  }
 
   return await cookbooksDatabase.create({ title, createdBy });
 }
