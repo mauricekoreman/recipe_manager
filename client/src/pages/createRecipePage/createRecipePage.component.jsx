@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiMinusSquare, FiPlusSquare } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -172,6 +172,28 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
           defaultValue={recipeData.title}
           placeholder={"Recipe name..."}
         />
+      </section>
+
+      <section className='create-recipe__section create-recipe__servings'>
+        <button
+          className='servings__button'
+          onClick={() =>
+            setRecipeData((prevState) => ({ ...prevState, servings: prevState.servings - 1 }))
+          }
+        >
+          <FiMinusSquare />
+        </button>
+        <p>
+          Servings: <b>{recipeData.servings}</b>
+        </p>
+        <button
+          className='servings__button'
+          onClick={() =>
+            setRecipeData((prevState) => ({ ...prevState, servings: prevState.servings + 1 }))
+          }
+        >
+          <FiPlusSquare />
+        </button>
       </section>
 
       <CreateInputs

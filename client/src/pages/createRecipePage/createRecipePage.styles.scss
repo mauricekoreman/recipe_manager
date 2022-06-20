@@ -17,6 +17,33 @@
   }
 }
 
+.create-recipe__servings { 
+  display: flex;
+  align-items: center;
+
+  .servings__button {
+    background: none;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    & > svg {
+      font-size: 3.5rem;
+      stroke-width: 1px;
+
+      &:hover {
+        color: $color-primary--hover;
+      }
+    }
+  }
+
+  & > p {
+    font-size: $default-font-size;
+  }
+}
+
 .add-input {
   color: $color-primary;
   position: absolute;
