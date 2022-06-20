@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getTags } from "../../redux/tagsSlice";
-import { createRecipe, updateRecipe, deleteRecipe, reset } from "../../redux/recipeSlice";
 import { addRecipeToCookbook } from "../../redux/cookbooksSlice";
+import { createRecipe, updateRecipe, deleteRecipe, reset } from "../../redux/recipeSlice";
 
 import Input from "../../components/input/input.component";
 import Checkbox from "../../components/checkbox/checkbox.component";
@@ -24,7 +24,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { cookbooks } = useSelector((state) => state.cookbooks);
+  const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
   const { isError, isSuccess, deleteRecipeSuccess, message } = useSelector(
     (state) => state.recipes
   );
@@ -45,8 +45,9 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const { img, title, servings, ingredients, utensils, instructions, notes, tags } = recipeData;
 
   useEffect(() => {
-    // get all available tags from back-end for display
     dispatch(getTags());
+
+    setSelectedCookbooks([cookbooks[currentCookbook]?._id]);
 
     if (location.state?.recipeData) {
       const lr = location.state.recipeData;
@@ -210,7 +211,13 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         <h2>Add to cookbooks</h2>
         <div className='checkbox__container'>
           {cookbooks.map((el, i) => (
-            <Checkbox onChange={handleCheckedCookbook} label={el.title} value={el._id} key={i} />
+            <Checkbox
+              onChange={handleCheckedCookbook}
+              label={el.title}
+              value={el._id}
+              key={i}
+              checked={selectedCookbooks.includes(el._id)}
+            />
           ))}
         </div>
       </section>

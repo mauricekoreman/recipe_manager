@@ -1,8 +1,9 @@
 import "./checkbox.styles.scss";
 
-const Checkbox = ({ label, category, value, onChange }) => (
+const Checkbox = ({ label, category, value, onChange, checked = false }) => (
   <label className='checkbox__label'>
     <input
+      checked={checked}
       className='checkbox__input'
       onChange={onChange}
       type='checkbox'

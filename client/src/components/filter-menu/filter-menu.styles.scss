@@ -3,9 +3,9 @@
 
 .filter {
   &__container {
-    position: absolute;
+    position: fixed;
     top: 0;
-    right: -30rem;
+    right: -40rem;
     width: 30rem;
     height: 100vh;
     background-color: $color-grey-light;
@@ -13,7 +13,7 @@
     flex-direction: column;
     padding: 3rem .8rem 1rem 2rem;
     box-shadow: 0rem 0 .9rem .2rem rgba($color: #000000, $alpha: 0.1);
-    transition: 0.3s all ease-out;
+    transition: 0.2s all ease-out;
 
     &--show {
       right: 0;

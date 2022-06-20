@@ -5,7 +5,7 @@ import Checkbox from "../checkbox/checkbox.component";
 
 import "./checkbox-list.styles.scss";
 
-const CheckboxList = ({ data = [], itemCheck, category }) => {
+const CheckboxList = ({ data = [], checkedItems = [], itemCheck, category }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Sorting array on alphabetical
@@ -16,7 +16,14 @@ const CheckboxList = ({ data = [], itemCheck, category }) => {
   return (
     <>
       {itemsForDisplay.map((el, i) => (
-        <Checkbox onChange={itemCheck} key={el + i} label={el} category={category} value={el} />
+        <Checkbox
+          checked={checkedItems.includes(el)}
+          onChange={itemCheck}
+          key={el + i}
+          label={el}
+          category={category}
+          value={el}
+        />
       ))}
       <p className='checkbox__show-btn' onClick={() => setExpanded((prevState) => !prevState)}>
         {expanded ? <FiMinus /> : <FiPlus />}

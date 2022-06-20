@@ -8,6 +8,8 @@ async function getRecipes(userId, queryText) {
 }
 
 async function getRecipesWithFilter(userId, tags) {
+  // TODO: if there are no tags, give back the cookbook recipes. => should be handled in the front-end right?
+
   return await recipesDatabase.find({
     createdBy: userId,
     tags: { $all: tags.split(",") },

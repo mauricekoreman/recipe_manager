@@ -127,6 +127,19 @@ async function getCookbookRecipes(cookbookId) {
   return await cookbooksDatabase.findById(cookbookId).populate("recipes");
 }
 
+async function getCookbookRecipesFiltered(cookbookId, tagItems) {
+  const cookbook = await cookbooksDatabase.findById(cookbookId);
+
+  if (!cookbook) {
+    throw new Error("Cookbook not found");
+  }
+
+  return await cookbooksDatabase.findById(cookbookId).populate({
+    path: "recipes",
+    match: { tags: { $all: tagItems.split(",") } },
+  });
+}
+
 module.exports = {
   getCookbooks,
   createCookbook,
@@ -135,4 +148,5 @@ module.exports = {
   addRecipeToCookbooks,
   removeRecipeFromCookbook,
   getCookbookRecipes,
+  getCookbookRecipesFiltered,
 };

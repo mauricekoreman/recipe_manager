@@ -1,4 +1,5 @@
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -10,7 +11,8 @@ import Menubar from "../../components/menubar/menubar.component";
 import TextButton from "../../components/text-button/text-button.component";
 import FloatingButton from "../../components/floating-button/floating-button.component";
 
-import { deleteCookbook, getCookbookRecipes, getUserRecipes } from "../../redux/cookbooksSlice";
+import { deleteCookbook } from "../../redux/cookbooksSlice";
+import { getCookbookRecipes, getUserRecipes, reset } from "../../redux/recipeSlice";
 
 import "./homepage.styles.scss";
 import Input from "../../components/input/input.component";
@@ -29,9 +31,11 @@ const Homepage = () => {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState("");
 
-  const { cookbooks, currentCookbook, currentCookbookRecipes } = useSelector(
-    (state) => state.cookbooks
+  const { currentCookbookRecipes, isError, isSuccess, message } = useSelector(
+    (state) => state.recipes
   );
+  const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
+
   function toggleModal() {
     setModalIsOpen((prevState) => !prevState);
   }
@@ -49,6 +53,10 @@ const Homepage = () => {
     dispatch(deleteCookbook(cookbookId));
     toggleModal();
     navigate("/");
+  }
+
+  function addRecipe() {
+    navigate(`${location.pathname}/create-recipe`);
   }
 
   useEffect(() => {
@@ -71,9 +79,13 @@ const Homepage = () => {
     getRecipes();
   }, [currentCookbook]);
 
-  function addRecipe() {
-    navigate(`${location.pathname}/create-recipe`);
-  }
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, message, dispatch]);
 
   return (
     <main className='homepage-container'>
@@ -85,10 +97,7 @@ const Homepage = () => {
             placeholder='Search recipes...'
             onChange={(e) => setQuery(e.target.value)}
           />
-          <FiFilter
-            className='homepage-recipes__header__icon'
-            onClick={toggleFilterMenu}
-          />
+          <FiFilter className='homepage-recipes__header__icon' onClick={toggleFilterMenu} />
           {currentCookbook !== null && (
             <FiMoreHorizontal
               className='homepage-recipes__header__icon'

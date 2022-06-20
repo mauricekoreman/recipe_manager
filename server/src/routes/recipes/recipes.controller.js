@@ -25,7 +25,7 @@ async function httpGetRecipes(req, res) {
   }
 }
 
-// @route   GET /api/recipes/
+// @route   GET /api/recipes/search
 // @access  private
 async function httpGetRecipesByFilter(req, res) {
   const userId = req.user.id;

@@ -6,6 +6,7 @@ const {
   addRecipeToCookbooks,
   removeRecipeFromCookbook,
   getCookbookRecipes,
+  getCookbookRecipesFiltered,
 } = require("../../models/cookbooks/cookbooks.model");
 
 // @route   POST /api/cookbooks/
@@ -114,13 +115,30 @@ async function httpRemoveRecipeFromCookbook(req, res) {
   }
 }
 
-// @route   GET /api/cookbooks/:id/recipes
+// @route   GET /api/cookbooks/:id/
 // @access  Public
 async function httpGetCookbookRecipes(req, res) {
   const { cookbookId } = req.params;
 
   try {
     const response = await getCookbookRecipes(cookbookId);
+
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
+// @route   GET /api/cookbooks/:id/search
+// @access  Public
+async function httpGetCookbookRecipesFiltered(req, res) {
+  const { cookbookId } = req.params;
+  const { tags } = req.query;
+
+  try {
+    const response = await getCookbookRecipesFiltered(cookbookId, tags);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -138,4 +156,5 @@ module.exports = {
   httpAddRecipeToCookbooks,
   httpRemoveRecipeFromCookbook,
   httpGetCookbookRecipes,
+  httpGetCookbookRecipesFiltered,
 };
