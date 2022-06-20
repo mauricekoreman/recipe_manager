@@ -5,10 +5,9 @@ const {
   httpCreateCookbook,
   httpUpdateCookbook,
   httpDeleteCookbook,
-  httpAddRecipeToCookbooks,
-  httpRemoveRecipeFromCookbooks,
   httpGetCookbookRecipes,
   httpGetCookbookRecipesFiltered,
+  httpGetCookbooksWithRecipe,
 } = require("./cookbooks.controller");
 
 const cookbooksRouter = express.Router();
@@ -17,8 +16,7 @@ const { protect } = require("../../middleware/authMiddleware");
 
 // /cookbooks/
 cookbooksRouter.route("/").get(protect, httpGetCookbooks).post(protect, httpCreateCookbook);
-cookbooksRouter.route("/addRecipeToCookbooks").patch(protect, httpAddRecipeToCookbooks);
-cookbooksRouter.route("/removeRecipeFromCookbooks").patch(protect, httpRemoveRecipeFromCookbooks);
+cookbooksRouter.route("/withRecipe/:recipeId").get(httpGetCookbooksWithRecipe);
 cookbooksRouter
   .route("/:cookbookId")
   .delete(protect, httpDeleteCookbook)

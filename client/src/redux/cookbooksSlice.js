@@ -42,20 +42,6 @@ export const getCookbooks = createAsyncThunk("cookbooks/get", async (_, thunkAPI
   }
 });
 
-// Add recipe to cookbook
-export const addRecipeToCookbook = createAsyncThunk("cookbooks/path", async (data, thunkAPI) => {
-  try {
-    const token = thunkAPI.getState().auth.user.token;
-    return await cookbooksService.httpAddRecipeToCookbook(data, token);
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.reponse.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
 // Delete cookbook
 export const deleteCookbook = createAsyncThunk("cookbooks/delete", async (cookbookId, thunkAPI) => {
   try {
@@ -110,18 +96,6 @@ export const cookbooksSlice = createSlice({
       .addCase(getCookbooks.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.message = action.payload;
-      })
-      .addCase(addRecipeToCookbook.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addRecipeToCookbook.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-      })
-      .addCase(addRecipeToCookbook.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
         state.message = action.payload;
       })
       .addCase(deleteCookbook.pending, (state) => {

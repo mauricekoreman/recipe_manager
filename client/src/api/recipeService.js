@@ -97,7 +97,7 @@ async function httpCreateRecipe(recipeData, token) {
 }
 
 // Update recipe
-async function httpUpdateRecipe(recipeData, recipeId, token) {
+async function httpUpdateRecipe(recipeData, token) {
   try {
     const config = {
       headers: {
@@ -105,7 +105,7 @@ async function httpUpdateRecipe(recipeData, recipeId, token) {
       },
     };
 
-    const response = await axios.patch(`${API_URL}/${recipeId}`, recipeData, config);
+    const response = await axios.patch(`${API_URL}/${recipeData.recipeId}`, recipeData, config);
 
     return response.data;
   } catch (e) {

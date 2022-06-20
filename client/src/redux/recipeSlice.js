@@ -97,7 +97,7 @@ export const updateRecipe = createAsyncThunk("recipes/update", async (recipeData
   try {
     const token = thunkAPI.getState().auth.user.token;
 
-    return await recipeService.httpUpdateRecipe(recipeData.data, recipeData.id, token);
+    return await recipeService.httpUpdateRecipe(recipeData, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.reponse.data.message) ||

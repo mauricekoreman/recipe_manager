@@ -7,8 +7,9 @@ const {
   getRecipesWithFilter,
 } = require("../../models/recipes/recipes.model");
 const {
-  removeRecipeFromCookbooks,
   getCookbooksWithRecipe,
+  addRecipeToCookbooks,
+  removeRecipeFromCookbooks,
 } = require("../../models/cookbooks/cookbooks.model");
 
 // @route   GET /api/recipes/
@@ -65,7 +66,7 @@ async function httpGetRecipeById(req, res) {
 // @route   POST /api/recipes/
 // @access  private
 async function httpCreateRecipe(req, res) {
-  const recipeData = req.body;
+  const { recipeData, cookbooks } = req.body;
   const createdBy = req.user.id;
 
   try {
@@ -79,7 +80,8 @@ async function httpCreateRecipe(req, res) {
 
     const response = await createRecipe(recipeData);
 
-    // TODO: Add recipe to cookbook here instead of front-end.
+    // Add recipe to cookbooks
+    await addRecipeToCookbooks(cookbooks, response._id, createdBy);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -92,8 +94,7 @@ async function httpCreateRecipe(req, res) {
 // @route   PATCH /api/recipes/:recipeId
 // @access  private
 async function httpUpdateRecipe(req, res) {
-  const recipeData = req.body;
-
+  const { recipeData, cookbooks } = req.body;
   const { recipeId } = req.params;
   const currentUser = req.user.id;
 
@@ -115,6 +116,19 @@ async function httpUpdateRecipe(req, res) {
     }
 
     const response = await updateRecipe(recipeId, recipeData);
+
+    // 1. check what cookbooks the recipe is in right now
+    const serverCookbooks = await getCookbooksWithRecipe(recipeId).then((res) =>
+      res.map((cookbook) => cookbook._id.toString())
+    );
+
+    // 2. what cookbooks are in cookbooks that are NOT in cookbooksWithRecipeArr
+    const newCookbooks = cookbooks.filter((cookbook) => !serverCookbooks.includes(cookbook));
+    await addRecipeToCookbooks(newCookbooks, recipeId, currentUser);
+
+    // 3. what cookbooks are in cookbooksWithRecipeArr that are NOT in cookbooks
+    const removedCookbooks = serverCookbooks.filter((cookbook) => !cookbooks.includes(cookbook));
+    await removeRecipeFromCookbooks(removedCookbooks, recipeId, currentUser);
 
     return res.status(200).json(response);
   } catch (e) {

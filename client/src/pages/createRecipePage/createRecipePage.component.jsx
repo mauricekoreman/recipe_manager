@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getTags } from "../../redux/tagsSlice";
-import { addRecipeToCookbook } from "../../redux/cookbooksSlice";
 import { createRecipe, updateRecipe, deleteRecipe, reset } from "../../redux/recipeSlice";
 
 import Input from "../../components/input/input.component";
@@ -17,6 +16,7 @@ import ChipContainer from "../../components/chip-container/chip-container.compon
 
 import "./createRecipePage.styles.scss";
 import TextButton from "../../components/text-button/text-button.component";
+import cookbooksService from "../../api/cookbooksService";
 
 const CreateRecipePage = ({ updateExistingRecipe }) => {
   let { recipeId, cookbook } = useParams();
@@ -45,9 +45,19 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const { img, title, servings, ingredients, utensils, instructions, notes, tags } = recipeData;
 
   useEffect(() => {
-    dispatch(getTags());
+    const fetchData = async () => {
+      dispatch(getTags());
 
-    setSelectedCookbooks([cookbooks[currentCookbook]?._id]);
+      // get cookbooks that the recipe is in!
+      if (updateExistingRecipe === true) {
+        const cookbooksIdArr = await cookbooksService.httpGetCookbooksWithRecipe(recipeId);
+        setSelectedCookbooks(cookbooksIdArr);
+      } else {
+        setSelectedCookbooks([cookbooks[currentCookbook]?._id]);
+      }
+    };
+
+    fetchData();
 
     if (location.state?.recipeData) {
       const lr = location.state.recipeData;
@@ -144,17 +154,15 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
     // Check if this page is updating an existing recipe or creating a new one.
     if (updateExistingRecipe === true) {
-      // const updatedRecipe = await dispatch()
-      dispatch(updateRecipe({ data: recipeDataSubmit, id: recipeId }));
+      dispatch(
+        updateRecipe({
+          recipeData: recipeDataSubmit,
+          recipeId: recipeId,
+          cookbooks: selectedCookbooks,
+        })
+      );
     } else {
-      const createdRecipe = await dispatch(createRecipe(recipeDataSubmit));
-
-      // NOTE: maybe this should be handled in the back-end instead?
-      if (selectedCookbooks.length > 0) {
-        dispatch(
-          addRecipeToCookbook({ cookbooks: selectedCookbooks, recipeId: createdRecipe.payload._id })
-        );
-      }
+      dispatch(createRecipe({ recipeData: recipeDataSubmit, cookbooks: selectedCookbooks }));
     }
   }
 

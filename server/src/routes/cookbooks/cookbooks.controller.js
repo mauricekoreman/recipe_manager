@@ -3,10 +3,9 @@ const {
   getCookbooks,
   updateCookbook,
   deleteCookbook,
-  addRecipeToCookbooks,
-  removeRecipeFromCookbooks,
   getCookbookRecipes,
   getCookbookRecipesFiltered,
+  getCookbooksWithRecipe,
 } = require("../../models/cookbooks/cookbooks.model");
 
 // @route   POST /api/cookbooks/
@@ -57,8 +56,6 @@ async function httpDeleteCookbook(req, res) {
 
     await deleteCookbook(cookbookId, userId);
 
-    // TODO: Now the cookbook must also be deleted from user cookbooks
-
     return res.status(200).json({ id: cookbookId });
   } catch (e) {
     return res.status(400).json({
@@ -72,40 +69,6 @@ async function httpDeleteCookbook(req, res) {
 async function httpGetCookbooks(req, res) {
   try {
     const response = await getCookbooks(req.user.id);
-
-    return res.status(200).json(response);
-  } catch (e) {
-    return res.status(400).json({
-      error: e.message,
-    });
-  }
-}
-
-// @route   PATCH /api/cookbooks/addRecipeToCookbooks
-// @access  private
-async function httpAddRecipeToCookbooks(req, res) {
-  const { cookbooks, recipeId } = req.body;
-  const userId = req.user.id;
-
-  try {
-    const response = await addRecipeToCookbooks(cookbooks, recipeId, userId);
-
-    return res.status(200).json(response);
-  } catch (e) {
-    return res.status(400).json({
-      error: e.message,
-    });
-  }
-}
-
-// @route   PATCH /api/cookbooks/removeRecipeFromCookbooks
-// @access  private
-async function httpRemoveRecipeFromCookbooks(req, res) {
-  const { cookbooks, recipeId } = req.body;
-  const userId = req.user.id;
-
-  try {
-    const response = await removeRecipeFromCookbooks(cookbooks, recipeId, userId);
 
     return res.status(200).json(response);
   } catch (e) {
@@ -148,13 +111,28 @@ async function httpGetCookbookRecipesFiltered(req, res) {
   }
 }
 
+async function httpGetCookbooksWithRecipe(req, res) {
+  const { recipeId } = req.params;
+
+  try {
+    const response = await getCookbooksWithRecipe(recipeId);
+
+    const cookbooksArr = response.map((cookbook) => cookbook._id);
+
+    return res.status(200).json(cookbooksArr);
+  } catch (e) {
+    return res.status(400).json({
+      error: e.message,
+    });
+  }
+}
+
 module.exports = {
   httpCreateCookbook,
   httpGetCookbooks,
   httpUpdateCookbook,
   httpDeleteCookbook,
-  httpAddRecipeToCookbooks,
-  httpRemoveRecipeFromCookbooks,
   httpGetCookbookRecipes,
   httpGetCookbookRecipesFiltered,
+  httpGetCookbooksWithRecipe,
 };
