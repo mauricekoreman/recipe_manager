@@ -80,7 +80,7 @@ async function httpUserGetFilteredRecipes(tags, token) {
 }
 
 // Create recipe
-async function httpCreateRecipe({ data }, token) {
+async function httpCreateRecipe(data, token) {
   try {
     const config = {
       headers: {

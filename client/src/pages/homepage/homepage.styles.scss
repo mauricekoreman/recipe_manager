@@ -2,8 +2,6 @@
 @import '../../sass/mixins';
 
 .homepage-container {
-  @include scrollbar;
-
   margin-right: .5rem;
   position: relative;
   background-color: #FFF;

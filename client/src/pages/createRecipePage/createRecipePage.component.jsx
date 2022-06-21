@@ -175,7 +175,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         })
       );
     } else {
-      dispatch(createRecipe({ data: formData }));
+      dispatch(createRecipe(formData));
     }
   }
 

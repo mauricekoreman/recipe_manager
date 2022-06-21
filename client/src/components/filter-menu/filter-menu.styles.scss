@@ -57,8 +57,6 @@
   }
 
   &__filters {
-    @include scrollbar;
-
     overflow: scroll;
   }
 }
