@@ -80,7 +80,7 @@ async function httpUserGetFilteredRecipes(tags, token) {
 }
 
 // Create recipe
-async function httpCreateRecipe(recipeData, token) {
+async function httpCreateRecipe({ data }, token) {
   try {
     const config = {
       headers: {
@@ -88,7 +88,7 @@ async function httpCreateRecipe(recipeData, token) {
       },
     };
 
-    const response = await axios.post(API_URL, recipeData, config);
+    const response = await axios.post(API_URL, data, config);
 
     return response.data;
   } catch (e) {
@@ -97,7 +97,7 @@ async function httpCreateRecipe(recipeData, token) {
 }
 
 // Update recipe
-async function httpUpdateRecipe(recipeData, token) {
+async function httpUpdateRecipe({ recipeId, data }, token) {
   try {
     const config = {
       headers: {
@@ -105,7 +105,7 @@ async function httpUpdateRecipe(recipeData, token) {
       },
     };
 
-    const response = await axios.patch(`${API_URL}/${recipeData.recipeId}`, recipeData, config);
+    const response = await axios.patch(`${API_URL}/${recipeId}`, data, config);
 
     return response.data;
   } catch (e) {

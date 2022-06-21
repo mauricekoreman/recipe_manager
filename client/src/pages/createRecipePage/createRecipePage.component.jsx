@@ -31,6 +31,8 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const { kitchen, type, season, diet, main, course } = useSelector((state) => state.tags);
 
   const [selectedCookbooks, setSelectedCookbooks] = useState([]);
+  const [imageData, setImageData] = useState();
+  const [imagePath, setImagePath] = useState("");
   const [recipeData, setRecipeData] = useState({
     img: "",
     title: "",
@@ -59,6 +61,8 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
     fetchData();
 
+    // For updating the recipe. The values of the recipe are given through
+    // location.state props with react-router-dom when navigating to this page.
     if (location.state?.recipeData) {
       const lr = location.state.recipeData;
 
@@ -90,6 +94,11 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
     dispatch(reset());
   }, [isError, isSuccess, deleteRecipeSuccess]);
+
+  function handleFileChange({ target }) {
+    setImageData(target.files[0]);
+    setImagePath(target.value);
+  }
 
   function onRecipeChange(updatedArr, category, newEl) {
     if (newEl) {
@@ -152,17 +161,21 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       tags,
     };
 
+    const formData = new FormData();
+    imageData && formData.set("img", imageData);
+    formData.set("recipeData", JSON.stringify(recipeDataSubmit));
+    formData.set("cookbooks", JSON.stringify(selectedCookbooks));
+
     // Check if this page is updating an existing recipe or creating a new one.
     if (updateExistingRecipe === true) {
       dispatch(
         updateRecipe({
-          recipeData: recipeDataSubmit,
           recipeId: recipeId,
-          cookbooks: selectedCookbooks,
+          data: formData,
         })
       );
     } else {
-      dispatch(createRecipe({ recipeData: recipeDataSubmit, cookbooks: selectedCookbooks }));
+      dispatch(createRecipe({ data: formData }));
     }
   }
 
@@ -173,6 +186,18 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   return (
     <article className='create-recipe__container'>
       <FiArrowLeft className='create-recipe__back-arrow' onClick={() => navigate(-1)} />
+
+      <section className='create-recipe__section'>
+        <input
+          type='file'
+          value={imagePath}
+          name='file'
+          accept='image/*'
+          onChange={handleFileChange}
+          placeholder='upload image'
+        />
+      </section>
+
       <section className='create-recipe__section'>
         <h2>Recipe name*</h2>
         <Input

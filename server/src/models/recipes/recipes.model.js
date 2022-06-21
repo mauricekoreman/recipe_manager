@@ -42,6 +42,10 @@ async function deleteRecipe(recipeId, userId) {
   return await recipe.remove();
 }
 
+async function uploadImage(recipeId, imagePath) {
+  return await recipesDatabase.findByIdAndUpdate(recipeId, { img: imagePath });
+}
+
 module.exports = {
   getRecipes,
   getRecipesWithFilter,
@@ -49,4 +53,5 @@ module.exports = {
   createRecipe,
   updateRecipe,
   deleteRecipe,
+  uploadImage,
 };

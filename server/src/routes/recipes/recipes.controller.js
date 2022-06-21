@@ -5,6 +5,7 @@ const {
   updateRecipe,
   deleteRecipe,
   getRecipesWithFilter,
+  uploadImage,
 } = require("../../models/recipes/recipes.model");
 const {
   getCookbooksWithRecipe,
@@ -66,8 +67,10 @@ async function httpGetRecipeById(req, res) {
 // @route   POST /api/recipes/
 // @access  private
 async function httpCreateRecipe(req, res) {
-  const { recipeData, cookbooks } = req.body;
   const createdBy = req.user.id;
+  const recipeData = JSON.parse(req.body.recipeData);
+  const cookbooks = JSON.parse(req.body.cookbooks);
+  const image = req.file?.path || recipeData.img;
 
   try {
     if (!recipeData.title || !recipeData.servings) {
@@ -76,6 +79,7 @@ async function httpCreateRecipe(req, res) {
 
     Object.assign(recipeData, {
       createdBy: createdBy,
+      img: image,
     });
 
     const response = await createRecipe(recipeData);
@@ -91,17 +95,41 @@ async function httpCreateRecipe(req, res) {
   }
 }
 
+async function httpUploadImage(req, res) {
+  const { recipeId } = req.params;
+  const image = req.file?.path || "";
+  const data = req.body;
+
+  // the data is back!
+  // const recipeData = JSON.parse(data);
+  console.log("uploadImage/data: ", JSON.parse(data.data));
+  console.log("uploadImage/cookbooks: ", JSON.parse(data.cookbooks));
+
+  try {
+    const response = await uploadImage(recipeId, image);
+
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(400).json({
+      error: `Image upload failed: ${error}`,
+    });
+  }
+}
+
 // @route   PATCH /api/recipes/:recipeId
 // @access  private
 async function httpUpdateRecipe(req, res) {
-  const { recipeData, cookbooks } = req.body;
   const { recipeId } = req.params;
   const currentUser = req.user.id;
+  const recipeData = JSON.parse(req.body.recipeData);
+  const cookbooks = JSON.parse(req.body.cookbooks);
+  const image = req.file?.path || recipeData.img;
 
   // check if there is a createdBy in the recipeData. If not: create one.
   if (!recipeData.createdBy) {
     Object.assign(recipeData, {
       createdBy: currentUser,
+      img: image,
     });
   }
 
@@ -171,4 +199,5 @@ module.exports = {
   httpCreateRecipe,
   httpUpdateRecipe,
   httpDeleteRecipe,
+  httpUploadImage,
 };
