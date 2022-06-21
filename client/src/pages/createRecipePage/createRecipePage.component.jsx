@@ -42,9 +42,11 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
     instructions: [{ text: "", id: nanoid() }],
     notes: [{ text: "", id: nanoid() }],
     tags: [],
+    imageFileName: "",
   });
 
-  const { img, title, servings, ingredients, utensils, instructions, notes, tags } = recipeData;
+  const { img, title, servings, ingredients, utensils, instructions, notes, tags, imageFileName } =
+    recipeData;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +77,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         instructions: lr.utensils.map((el) => ({ text: el, id: nanoid() })),
         notes: [{ text: lr.notes, id: nanoid() }],
         tags: lr.tags,
+        imageFileName: lr.imageFileName,
       }));
     }
   }, []);
@@ -159,6 +162,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       instructions: removeIds(instructions),
       notes: removeIds(notes)[0],
       tags,
+      imageFileName,
     };
 
     const formData = new FormData();

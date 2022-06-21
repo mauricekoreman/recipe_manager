@@ -19,6 +19,7 @@ const recipeSchema = new mongoose.Schema({
   tags: [String],
   instructions: [String],
   notes: String,
+  imageFileName: String,
 });
 
 module.exports = mongoose.model("Recipe", recipeSchema);

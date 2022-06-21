@@ -5,13 +5,14 @@ const {
   updateRecipe,
   deleteRecipe,
   getRecipesWithFilter,
-  uploadImage,
 } = require("../../models/recipes/recipes.model");
 const {
   getCookbooksWithRecipe,
   addRecipeToCookbooks,
   removeRecipeFromCookbooks,
 } = require("../../models/cookbooks/cookbooks.model");
+
+const cloudinary = require("../../services/cloudinary.config");
 
 // @route   GET /api/recipes/
 // @access  private
@@ -71,6 +72,9 @@ async function httpCreateRecipe(req, res) {
   const recipeData = JSON.parse(req.body.recipeData);
   const cookbooks = JSON.parse(req.body.cookbooks);
   const image = req.file?.path || recipeData.img;
+  const imageFileName = req.file?.filename;
+
+  console.log(imageFileName);
 
   try {
     if (!recipeData.title || !recipeData.servings) {
@@ -80,6 +84,7 @@ async function httpCreateRecipe(req, res) {
     Object.assign(recipeData, {
       createdBy: createdBy,
       img: image,
+      imageFileName: imageFileName,
     });
 
     const response = await createRecipe(recipeData);
@@ -95,27 +100,6 @@ async function httpCreateRecipe(req, res) {
   }
 }
 
-async function httpUploadImage(req, res) {
-  const { recipeId } = req.params;
-  const image = req.file?.path || "";
-  const data = req.body;
-
-  // the data is back!
-  // const recipeData = JSON.parse(data);
-  console.log("uploadImage/data: ", JSON.parse(data.data));
-  console.log("uploadImage/cookbooks: ", JSON.parse(data.cookbooks));
-
-  try {
-    const response = await uploadImage(recipeId, image);
-
-    return res.status(200).json(response);
-  } catch (error) {
-    return res.status(400).json({
-      error: `Image upload failed: ${error}`,
-    });
-  }
-}
-
 // @route   PATCH /api/recipes/:recipeId
 // @access  private
 async function httpUpdateRecipe(req, res) {
@@ -124,6 +108,9 @@ async function httpUpdateRecipe(req, res) {
   const recipeData = JSON.parse(req.body.recipeData);
   const cookbooks = JSON.parse(req.body.cookbooks);
   const image = req.file?.path || recipeData.img;
+
+  const newImageFileName = req.file?.filename;
+  const oldImageFileName = recipeData.imageFileName;
 
   // check if there is a createdBy in the recipeData. If not: create one.
   if (!recipeData.createdBy) {
@@ -141,6 +128,15 @@ async function httpUpdateRecipe(req, res) {
 
     if (!recipeData.title || !recipeData.servings) {
       throw new Error("Please fill in all required fields");
+    }
+
+    // Check if oldImageFileName is filled
+    if (oldImageFileName) {
+      // Check if newImageFileName is different from oldImageFileName
+      if (newImageFileName !== oldImageFileName || image === "") {
+        // Remove oldImageFileName
+        await cloudinary.uploader.destroy(oldImageFileName);
+      }
     }
 
     const response = await updateRecipe(recipeId, recipeData);
@@ -199,5 +195,4 @@ module.exports = {
   httpCreateRecipe,
   httpUpdateRecipe,
   httpDeleteRecipe,
-  httpUploadImage,
 };

@@ -7,28 +7,22 @@ const {
   httpCreateRecipe,
   httpUpdateRecipe,
   httpDeleteRecipe,
-  httpUploadImage,
 } = require("./recipes.controller");
 
 const recipesRouter = express.Router();
 
 const { protect } = require("../../middleware/authMiddleware");
-const parser = require("../../middleware/cloudinary.config");
+const parser = require("../../middleware/cloudinaryMiddleware");
 
 // /recipes/
-recipesRouter
-  .route("/")
-  .get(protect, httpGetRecipes)
-  .post(protect, parser.single("img"), httpCreateRecipe);
-
-recipesRouter.route("/image/:recipeId").post(protect, parser.single("img"), httpUploadImage);
+recipesRouter.route("/").get(protect, httpGetRecipes).post(protect, parser, httpCreateRecipe);
 
 recipesRouter.route("/search").get(protect, httpGetRecipesByFilter);
 
 recipesRouter
   .route("/:recipeId")
   .get(httpGetRecipeById)
-  .patch(protect, parser.single("img"), httpUpdateRecipe)
+  .patch(protect, parser, httpUpdateRecipe)
   .delete(protect, httpDeleteRecipe);
 
 module.exports = recipesRouter;
