@@ -74,8 +74,6 @@ async function httpCreateRecipe(req, res) {
   const image = req.file?.path || recipeData.img;
   const imageFileName = req.file?.filename;
 
-  console.log(imageFileName);
-
   try {
     if (!recipeData.title || !recipeData.servings) {
       throw new Error("Please fill in all required fields");
@@ -170,6 +168,11 @@ async function httpDeleteRecipe(req, res) {
 
   try {
     const response = await deleteRecipe(recipeId, currentUser);
+
+    // Delete the recipe image from cloudinary storage
+    if (response.imageFileName) {
+      await cloudinary.uploader.destroy(response.imageFileName);
+    }
 
     // Find the cookbooks that the recipe is in
     const cookbooks = await getCookbooksWithRecipe(recipeId);
