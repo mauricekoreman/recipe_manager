@@ -103,7 +103,7 @@ async function httpCreateRecipe(req, res) {
 async function httpUpdateRecipe(req, res) {
   const { recipeId } = req.params;
   const currentUser = req.user.id;
-  const recipeData = JSON.parse(req.body.recipeData);
+  const recipeData = JSON.parse(req.body.recipeData); // TODO: add error handling.
   const cookbooks = JSON.parse(req.body.cookbooks);
   const image = req.file?.path || recipeData.img;
 

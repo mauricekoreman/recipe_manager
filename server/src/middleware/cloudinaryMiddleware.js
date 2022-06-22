@@ -8,12 +8,16 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "recipe_images",
-    format: async () => "png",
+    format: async () => "webp",
     public_id: (req, file) => file.filename,
   },
 });
 
 async function parser(req, res, next) {
+  // to check the size of the file :D
+  // const fileSize = req.headers["content-length"] / 1024 / 1024;
+  const maxSize = 2 * 1024 * 1024;
+
   const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
@@ -24,6 +28,7 @@ async function parser(req, res, next) {
       }
       cb(null, true);
     },
+    limits: { fileSize: maxSize },
   }).single("img");
 
   upload(req, res, function (err) {
