@@ -8,20 +8,21 @@
   flex-direction: column;
   align-items: center;
 
-   & > p {
+  &__link {
     font-size: 1.4rem;
+    text-decoration: underline;
+    color: $color-primary;
 
-    & > span {
-      text-decoration: underline;
-      color: $color-primary;
-
-      &:hover {
+    &:hover {
         cursor: pointer;
       }
 
       &:active {
         color: #efc808;
       }
+
+    &__container {
+      font-size: 1.4rem;
     }
   }
 

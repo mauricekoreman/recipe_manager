@@ -32,10 +32,6 @@ const SettingsPage = () => {
     dispatch(updateUser(userData));
   }
 
-  function changePassword() {
-    console.log("changing password!");
-  }
-
   return (
     <main className='settings__container'>
       <div className='settings__heading'>
@@ -64,7 +60,7 @@ const SettingsPage = () => {
           icon={<FiKey />}
           text={"Change password"}
           className={"settings__btn settings__btn--password"}
-          onClick={changePassword}
+          onClick={() => navigate("/password/requestReset")}
         />
         <TextButton
           icon={<FiLogOut />}

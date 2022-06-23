@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LandingHeading from "../../../components/landing-heading/landing-heading.component";
 import PrimaryButton from "../../../components/primary-button/primary-button.component";
 
@@ -9,6 +10,7 @@ const AuthLayout = ({
   buttonText,
   navigateText,
   navigateActionText,
+  navigateTo,
   children,
 }) => (
   <div className='auth'>
@@ -17,10 +19,15 @@ const AuthLayout = ({
       {children}
       <PrimaryButton type='submit' text={buttonText} />
     </form>
-    <p>
+    <p className='auth__link__container'>
       {navigateText + " "}
-      <span>{navigateActionText}</span>
+      <Link className='auth__link' to={navigateTo}>
+        {navigateActionText}
+      </Link>
     </p>
+    <Link className='auth__link' to={"/password/requestReset"}>
+      Forgot your password?
+    </Link>
   </div>
 );
 

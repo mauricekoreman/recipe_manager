@@ -57,6 +57,7 @@ const LoginPage = () => {
       navigateText={"Don't have an account?"}
       navigateActionText={"Register now!"}
       onSubmit={onSubmit}
+      navigateTo={"/register"}
     >
       <Input
         name='email'

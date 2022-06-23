@@ -53,6 +53,26 @@ async function httpUpdateUser(userData, token) {
   }
 }
 
+async function httpRequestPasswordReset(email) {
+  try {
+    const response = await axios.post(`${API_URL}/password/requestResetPassword`, { email });
+
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
+async function httpResetPassword(newPasswordData) {
+  try {
+    const response = await axios.post(`${API_URL}/password/resetPassword`, newPasswordData);
+
+    return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 // Logout user
 function logout() {
   localStorage.removeItem("RECIPE_MANAGER_USER");
@@ -63,6 +83,8 @@ const authService = {
   httpLogin,
   httpUpdateUser,
   logout,
+  httpRequestPasswordReset,
+  httpResetPassword,
 };
 
 export default authService;

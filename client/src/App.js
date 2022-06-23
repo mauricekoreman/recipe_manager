@@ -14,6 +14,8 @@ import RecipesGridContainer from "./components/recipes-grid-container/recipes-gr
 
 import "./sass/_base.scss";
 import ReadRecipePage from "./pages/readRecipePage/readRecipePage.component";
+import ResetPasswordPage from "./pages/auth/resetPasswordPage/resetPasswordPage.component";
+import RequestPasswordReset from "./pages/auth/requestPasswordReset/requestPasswordReset.component";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path='/:cookbook/create-recipe' element={<CreateRecipePage />} />
             <Route path='/settings' element={<SettingsPage />} />
           </Route>
+          <Route path='/password/requestReset' element={<RequestPasswordReset />} />
+          <Route path='/password/reset' element={<ResetPasswordPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='*' element={<NotFoundPage />} />
@@ -44,6 +48,10 @@ function App() {
 }
 
 export default App;
+
+
+
+
 
 
 

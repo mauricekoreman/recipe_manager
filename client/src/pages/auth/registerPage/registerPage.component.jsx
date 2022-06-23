@@ -66,6 +66,7 @@ const RegisterPage = () => {
       navigateActionText={"Login now!"}
       navigateText={"Already have an account?"}
       onSubmit={onSubmit}
+      navigateTo={"/login"}
     >
       <Input name='name' label='Name' placeholder='John Doe' type='text' onChange={onChange} />
       <Input

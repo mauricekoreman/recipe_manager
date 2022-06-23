@@ -192,6 +192,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       <FiArrowLeft className='create-recipe__back-arrow' onClick={() => navigate(-1)} />
 
       <section className='create-recipe__section'>
+        <label>Max file size: 2MB</label>
         <input
           type='file'
           value={imagePath}
