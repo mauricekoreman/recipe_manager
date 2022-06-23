@@ -110,17 +110,28 @@ async function httpGetMe(req, res) {
 // @route   PATCH api/v1/users/me
 // @access  private
 async function httpUpdateUser(req, res) {
-  const userData = req.body;
+  const { name, newEmail, oldEmail, password } = req.body;
   const userId = req.user.id;
 
   try {
-    const response = await updateUser(userData, userId);
+    // find if user exists
+    const user = await existUserByEmail(oldEmail);
 
-    const userWithToken = Object.assign({}, response._doc, {
-      token: generateToken(userId),
-    });
+    // Check password
+    if (user && (await bcrypt.compare(String(password), user.hashed_password))) {
+      // Update user!
+      const response = await updateUser({ name, email: newEmail }, userId);
 
-    return res.status(200).json(userWithToken);
+      const userWithToken = Object.assign({}, response._doc, {
+        token: generateToken(userId),
+      });
+
+      return res.status(200).json(userWithToken);
+    } else {
+      return res.status(400).json({
+        error: "Invalid password",
+      });
+    }
   } catch (e) {
     return res.status(400).json({
       error: e.message,

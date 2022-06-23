@@ -51,3 +51,11 @@
     }
   }
 }
+
+.confirm-modal-btn {
+  margin-top: 3rem;
+
+  &:hover {
+    color: $color-primary--hover;
+  }
+}

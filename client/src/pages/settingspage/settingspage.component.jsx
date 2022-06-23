@@ -5,19 +5,37 @@ import Input from "../../components/input/input.component";
 import TextButton from "../../components/text-button/text-button.component";
 import PrimaryButton from "../../components/primary-button/primary-button.component";
 
-import { logout, updateUser } from "../../redux/authSlice";
+import { logout, updateUser, reset } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Modal from "../../components/modal/modal.component";
+import { toast } from "react-toastify";
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const [showModal, setShowModal] = useState(false);
 
   const [userData, setUserData] = useState({
-    username: user?.name,
-    email: user?.email,
+    name: user?.name,
+    oldEmail: user?.email,
+    newEmail: user?.email,
+    password: "",
   });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      toast.success("Changes saved!");
+      setShowModal(false);
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess]);
 
   function onUserDataChange(e) {
     setUserData((prevState) => ({
@@ -26,7 +44,7 @@ const SettingsPage = () => {
     }));
   }
 
-  function saveChanges(e) {
+  function submitUserChanges(e) {
     e.preventDefault();
 
     dispatch(updateUser(userData));
@@ -39,7 +57,7 @@ const SettingsPage = () => {
         <h1>Settings</h1>
       </div>
 
-      <form onSubmit={saveChanges}>
+      <form onSubmit={submitUserChanges}>
         <Input
           required
           name={"name"}
@@ -50,7 +68,7 @@ const SettingsPage = () => {
         />
         <Input
           required
-          name={"email"}
+          name={"newEmail"}
           label={"Email"}
           type='email'
           defaultValue={user?.email}
@@ -68,7 +86,28 @@ const SettingsPage = () => {
           className={"settings__btn settings__btn--logout"}
           onClick={() => dispatch(logout())}
         />
-        <PrimaryButton type='submit' text={"Save changes"} />
+        <PrimaryButton type='button' onClick={() => setShowModal(true)} text={"Save changes"} />
+        {showModal && (
+          <Modal
+            backdropClick={() => setShowModal(false)}
+            header='Please confirm your changes with your password'
+          >
+            <Input
+              autoFocus
+              name='password'
+              type='password'
+              label='Your password'
+              onChange={onUserDataChange}
+              required
+            />
+            <TextButton
+              text='Confirm'
+              type='submit'
+              className='confirm-modal-btn'
+              onClick={submitUserChanges}
+            />
+          </Modal>
+        )}
       </form>
     </main>
   );

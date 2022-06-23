@@ -1,4 +1,3 @@
-import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -17,14 +16,13 @@ import { getCookbookRecipes, getUserRecipes, reset } from "../../redux/recipeSli
 import "./homepage.styles.scss";
 import Input from "../../components/input/input.component";
 import FilterMenu from "../../components/filter-menu/filter-menu.component";
-
-Modal.setAppElement("#root");
+import Modal from "../../components/modal/modal.component";
 
 const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
 
@@ -37,7 +35,7 @@ const Homepage = () => {
   const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
 
   function toggleModal() {
-    setModalIsOpen((prevState) => !prevState);
+    setShowModal((prevState) => !prevState);
   }
 
   function toggleFloatMenu() {
@@ -123,26 +121,22 @@ const Homepage = () => {
         <FloatingButton onClick={addRecipe} icon={<FiPlus />} />
       </div>
       <FilterMenu show={showFilterMenu} toggle={toggleFilterMenu} />
-      <Modal
-        className={"modal"}
-        overlayClassName={"modal__overlay"}
-        isOpen={modalIsOpen}
-        onRequestClose={toggleModal}
-      >
-        <h2 className='modal__header'>Are you sure you want to delete this cookbook?</h2>
-        <div className='modal-button__container'>
-          <TextButton
-            text={"Delete"}
-            className='modal-button modal-button--delete'
-            onClick={handleDeleteCookbook}
-          />
-          <TextButton
-            text={"Cancel"}
-            className='modal-button modal-button--cancel'
-            onClick={toggleModal}
-          />
-        </div>
-      </Modal>
+      {showModal && (
+        <Modal backdropClick={toggleModal} header='Are you sure you want to delete this cookbooks?'>
+          <div className='modal-button__container'>
+            <TextButton
+              text='Delete'
+              className='modal-button modal-button--delete'
+              onClick={handleDeleteCookbook}
+            />
+            <TextButton
+              text='Cancel'
+              className='modal-button modal-button--cancel'
+              onClick={toggleModal}
+            />
+          </div>
+        </Modal>
+      )}
     </main>
   );
 };
