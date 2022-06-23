@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FiFilter, FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
+import { Outlet, useNavigate } from "react-router-dom";
+import { FiFilter, FiMoreHorizontal, FiTrash2, FiPlus, FiEdit2 } from "react-icons/fi";
 
 import ClickAwayListener from "react-click-away-listener";
 
@@ -10,7 +10,7 @@ import Menubar from "../../components/menubar/menubar.component";
 import TextButton from "../../components/text-button/text-button.component";
 import FloatingButton from "../../components/floating-button/floating-button.component";
 
-import { deleteCookbook } from "../../redux/cookbooksSlice";
+import { deleteCookbook, updateCookbook } from "../../redux/cookbooksSlice";
 import { getCookbookRecipes, getUserRecipes, reset } from "../../redux/recipeSlice";
 
 import "./homepage.styles.scss";
@@ -21,10 +21,11 @@ import Modal from "../../components/modal/modal.component";
 const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteCookbookModal, setShowDeleteCookbookModal] = useState(false);
+  const [showEditCookbookModal, setShowEditCookbookModal] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [cookbookTitle, setCookbookTitle] = useState("");
 
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState("");
@@ -33,9 +34,15 @@ const Homepage = () => {
     (state) => state.recipes
   );
   const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
+  const cookbooksError = useSelector((state) => state.cookbooks.isError);
+  const cookbooksSuccess = useSelector((state) => state.cookbooks.isSuccess);
 
-  function toggleModal() {
-    setShowModal((prevState) => !prevState);
+  function toggleDeleteCookbookModal() {
+    setShowDeleteCookbookModal((prevState) => !prevState);
+  }
+
+  function toggleEditCookbookModal() {
+    setShowEditCookbookModal((prevState) => !prevState);
   }
 
   function toggleFloatMenu() {
@@ -49,13 +56,30 @@ const Homepage = () => {
   function handleDeleteCookbook() {
     const cookbookId = cookbooks[currentCookbook]._id;
     dispatch(deleteCookbook(cookbookId));
-    toggleModal();
+    toggleDeleteCookbookModal();
     navigate("/");
   }
 
-  function addRecipe() {
-    navigate(`${location.pathname}/create-recipe`);
+  function onCookbookTitleChange(e) {
+    setCookbookTitle(e.target.value);
   }
+
+  function submitChangeCookbookTitle() {
+    const cookbookId = cookbooks[currentCookbook]._id;
+
+    dispatch(updateCookbook({ cookbookId: cookbookId, title: cookbookTitle }));
+  }
+
+  useEffect(() => {
+    if (cookbooksError) {
+      toast.error("Something went wrong...");
+    }
+
+    if (cookbooksSuccess) {
+      toast.success("Cookbook title updated!");
+      toggleEditCookbookModal();
+    }
+  }, [cookbooksError, cookbooksSuccess]);
 
   useEffect(() => {
     const searchedRecipes = currentCookbookRecipes.filter((recipe) =>
@@ -107,10 +131,16 @@ const Homepage = () => {
             <ClickAwayListener onClickAway={toggleFloatMenu}>
               <div className='floating-menu floating-menu--homepage'>
                 <TextButton
-                  className='floating-menu__button'
+                  className={"floating-menu__button floating-menu__button--edit"}
+                  text='Edit cookbook name'
+                  icon={<FiEdit2 />}
+                  onClick={toggleEditCookbookModal}
+                />
+                <TextButton
+                  className='floating-menu__button floating-menu__button--delete'
                   text={"Delete cookbook"}
                   icon={<FiTrash2 />}
-                  onClick={toggleModal}
+                  onClick={toggleDeleteCookbookModal}
                 />
               </div>
             </ClickAwayListener>
@@ -118,11 +148,14 @@ const Homepage = () => {
         </div>
 
         <Outlet context={recipes} />
-        <FloatingButton onClick={addRecipe} icon={<FiPlus />} />
+        <FloatingButton onClick={() => navigate("./create-recipe")} icon={<FiPlus />} />
       </div>
       <FilterMenu show={showFilterMenu} toggle={toggleFilterMenu} />
-      {showModal && (
-        <Modal backdropClick={toggleModal} header='Are you sure you want to delete this cookbooks?'>
+      {showDeleteCookbookModal && (
+        <Modal
+          backdropClick={toggleDeleteCookbookModal}
+          header='Are you sure you want to delete this cookbooks?'
+        >
           <div className='modal-button__container'>
             <TextButton
               text='Delete'
@@ -132,13 +165,31 @@ const Homepage = () => {
             <TextButton
               text='Cancel'
               className='modal-button modal-button--cancel'
-              onClick={toggleModal}
+              onClick={toggleDeleteCookbookModal}
             />
           </div>
         </Modal>
       )}
+      {showEditCookbookModal && (
+        <Modal backdropClick={toggleEditCookbookModal} header='Edit cookbook name'>
+          <Input
+            autoFocus
+            name='cookbook'
+            type='text'
+            label='Cookbook title'
+            onChange={onCookbookTitleChange}
+            defaultValue={cookbooks[currentCookbook]?.title}
+            required
+          />
+          <TextButton
+            text='Confirm'
+            className='confirm-modal-btn'
+            onClick={submitChangeCookbookTitle}
+          />
+        </Modal>
+      )}
     </main>
   );
-};
+};;;;
 
 export default Homepage;

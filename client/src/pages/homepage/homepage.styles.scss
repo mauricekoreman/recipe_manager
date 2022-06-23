@@ -36,7 +36,7 @@
 
 .floating-menu {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 1rem;
   background-color: #f3f3f3;
   padding: 2rem;
@@ -48,14 +48,18 @@
   & > .floating-menu__button {
     color: #413e3e;
     
-    &:hover {
+    &--delete:hover {
       color: #f11d1d;
+    }
+
+    &--edit:hover {
+      color: $color-primary--hover
     }
   }
 
   &--homepage {
     position: absolute;
-    transform: translateX(-20%);
+    transform: translate(-20%, 30%);
   }
 }
 

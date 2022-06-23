@@ -34,7 +34,7 @@ async function httpCreateCookbook(req, res) {
 async function httpUpdateCookbook(req, res) {
   try {
     const cookbookId = req.params.cookbookId;
-    const title = req.body.title;
+    const { title } = req.body;
     const userId = req.user.id;
 
     const updatedCookbook = await updateCookbook(cookbookId, title, userId);

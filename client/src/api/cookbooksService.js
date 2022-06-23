@@ -52,6 +52,22 @@ async function httpDeleteCookbook(cookbookId, token) {
   }
 }
 
+// Update cookbook
+async function httpUpdateCookbook(cookbookData, token) {
+  try {
+     const config = {
+       headers: {
+         Authorization: `Bearer ${token}`,
+       },
+     };
+
+     const response = await axios.patch(`${API_URL}/${cookbookData.cookbookId}`, cookbookData, config);
+     return response.data;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+}
+
 // Get cookbooks containing a specific recipe
 async function httpGetCookbooksWithRecipe(recipeId) {
   try {
@@ -66,6 +82,7 @@ const cookbooksService = {
   httpCreateCookbook,
   httpGetCookbooks,
   httpDeleteCookbook,
+  httpUpdateCookbook,
   httpGetCookbooksWithRecipe,
 };
 
