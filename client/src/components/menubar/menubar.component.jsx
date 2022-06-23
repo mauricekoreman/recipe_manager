@@ -57,6 +57,20 @@ const Menubar = () => {
     setFilteredCookbooks(searchedCookbooks);
   }, [cookbookQuery, cookbooks]);
 
+  useEffect(() => {
+    const keyDownHandler = (e) => {
+      if (e.key === "Escape") {
+        setAddCookbook(false);
+      }
+    };
+    document.addEventListener("keydown", keyDownHandler);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   // Getting user cookbooks
   useEffect(() => {
     dispatch(getCookbooks());
@@ -79,13 +93,18 @@ const Menubar = () => {
         {addCookbook && (
           <form onSubmit={handleSubmit}>
             <input
+              autoFocus
               type='text'
               name='cookbook'
               value={cookbookTitle}
               onChange={(e) => setCookbookTitle(e.target.value)}
               className='addCookbook__input'
             />
-            <button onClick={() => setAddCookbook(false)} className='addCookbook__cancel-btn'>
+            <button
+              type='button'
+              onClick={() => setAddCookbook(false)}
+              className='addCookbook__cancel-btn'
+            >
               x
             </button>
             <button className='addCookbook__add-btn' type='submit'>

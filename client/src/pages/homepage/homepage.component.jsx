@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { FiFilter, FiMoreHorizontal, FiTrash2, FiPlus, FiEdit2 } from "react-icons/fi";
 
 import ClickAwayListener from "react-click-away-listener";
@@ -21,6 +21,7 @@ import Modal from "../../components/modal/modal.component";
 const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showDeleteCookbookModal, setShowDeleteCookbookModal] = useState(false);
   const [showEditCookbookModal, setShowEditCookbookModal] = useState(false);
   const [showFloatMenu, setShowFloatMenu] = useState(false);
@@ -35,7 +36,7 @@ const Homepage = () => {
   );
   const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
   const cookbooksError = useSelector((state) => state.cookbooks.isError);
-  const cookbooksSuccess = useSelector((state) => state.cookbooks.isSuccess);
+  const cookbooksSuccess = useSelector((state) => state.cookbooks.isUpdated);
 
   function toggleDeleteCookbookModal() {
     setShowDeleteCookbookModal((prevState) => !prevState);
@@ -77,7 +78,7 @@ const Homepage = () => {
 
     if (cookbooksSuccess) {
       toast.success("Cookbook title updated!");
-      toggleEditCookbookModal();
+      setShowEditCookbookModal(false);
     }
   }, [cookbooksError, cookbooksSuccess]);
 
@@ -148,7 +149,10 @@ const Homepage = () => {
         </div>
 
         <Outlet context={recipes} />
-        <FloatingButton onClick={() => navigate("./create-recipe")} icon={<FiPlus />} />
+        <FloatingButton
+          onClick={() => navigate(`${location.pathname}/create-recipe`)}
+          icon={<FiPlus />}
+        />
       </div>
       <FilterMenu show={showFilterMenu} toggle={toggleFilterMenu} />
       {showDeleteCookbookModal && (

@@ -8,6 +8,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isUpdated: false,
   message: "",
 };
 
@@ -57,18 +58,21 @@ export const deleteCookbook = createAsyncThunk("cookbooks/delete", async (cookbo
 });
 
 // Update cookbook title
-export const updateCookbook = createAsyncThunk("cookbooks/update", async (cookbookData, thunkAPI) => {
-  try {
-    const token = thunkAPI.getState().auth.user.token;
-    return await cookbooksService.httpUpdateCookbook(cookbookData, token);
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.reponse.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
+export const updateCookbook = createAsyncThunk(
+  "cookbooks/update",
+  async (cookbookData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await cookbooksService.httpUpdateCookbook(cookbookData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.reponse.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-})
+);
 
 export const cookbooksSlice = createSlice({
   name: "cookbook",
@@ -130,7 +134,7 @@ export const cookbooksSlice = createSlice({
       })
       .addCase(updateCookbook.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isUpdated = true;
         state.cookbooks[state.currentCookbook] = action.payload;
       })
       .addCase(updateCookbook.rejected, (state, action) => {
