@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/v1/tags";
+const API_URL = "/api/v1/tags";
 
 // GET tags
 async function httpGetTags() {

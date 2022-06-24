@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/v1/cookbooks";
+const API_URL = "/api/v1/cookbooks";
 
 // Create cookbook
 async function httpCreateCookbook(cookbookTitle, token) {
