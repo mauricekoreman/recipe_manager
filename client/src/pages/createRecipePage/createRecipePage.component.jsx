@@ -80,7 +80,14 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         imageFileName: lr.imageFileName,
       }));
     }
-  }, []);
+  }, [
+    cookbooks,
+    currentCookbook,
+    dispatch,
+    recipeId,
+    updateExistingRecipe,
+    location.state?.recipeData,
+  ]);
 
   useEffect(() => {
     if (isError) {
@@ -96,7 +103,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
     }
 
     dispatch(reset());
-  }, [isError, isSuccess, deleteRecipeSuccess]);
+  }, [isError, isSuccess, deleteRecipeSuccess, cookbook, dispatch, message, navigate]);
 
   function onRecipeChange(updatedArr, category, newEl) {
     if (newEl) {
