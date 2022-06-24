@@ -1,0 +1,51 @@
+@import '../../sass/variables';
+
+.upload__preview {
+  display: grid;
+  place-items: center;
+  gap: 3rem;
+
+  &__img {
+    object-fit: cover;
+    height: 25rem;
+    width: 40rem;
+    border-radius: 2rem;
+  }
+
+  &__btn-container {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &__btn {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+
+    & + label {
+      font-size: $default-font-size;
+      cursor: pointer;
+      background-color: $color-primary;
+      color: #FFF;
+      padding: .6em 1.5em;
+      border-radius: 100px;
+      display: inline-block;
+    }
+
+    &:focus + label,
+    & + label:hover {
+      background-color: $color-primary--hover;
+    }
+
+    &--delete {
+      background: none;
+      outline: none;
+      border: none;
+      font-size: $default-font-size;
+      cursor: pointer;
+    }
+  }
+}

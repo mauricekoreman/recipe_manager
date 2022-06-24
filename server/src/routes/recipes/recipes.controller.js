@@ -128,13 +128,19 @@ async function httpUpdateRecipe(req, res) {
       throw new Error("Please fill in all required fields");
     }
 
-    // Check if oldImageFileName is filled
-    if (oldImageFileName) {
-      // Check if newImageFileName is different from oldImageFileName
-      if (newImageFileName !== oldImageFileName || image === "") {
-        // Remove oldImageFileName
-        await cloudinary.uploader.destroy(oldImageFileName);
-      }
+    // Als gebruiker gebruiker de image wil verwijderen
+    if (!newImageFileName && recipeData.img === "") {
+      oldImageFileName && (await cloudinary.uploader.destroy(oldImageFileName));
+      Object.assign(recipeData, {
+        imageFileName: "",
+      });
+    }
+    // Als de gebruiker een nieuwe image wil uploaden
+    else if (newImageFileName) {
+      oldImageFileName && (await cloudinary.uploader.destroy(oldImageFileName));
+      Object.assign(recipeData, {
+        imageFileName: newImageFileName,
+      });
     }
 
     const response = await updateRecipe(recipeId, recipeData);

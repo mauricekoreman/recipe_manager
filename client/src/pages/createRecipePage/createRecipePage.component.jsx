@@ -17,6 +17,7 @@ import ChipContainer from "../../components/chip-container/chip-container.compon
 import "./createRecipePage.styles.scss";
 import TextButton from "../../components/text-button/text-button.component";
 import cookbooksService from "../../api/cookbooksService";
+import Upload from "../../components/upload/upload.component";
 
 const CreateRecipePage = ({ updateExistingRecipe }) => {
   let { recipeId, cookbook } = useParams();
@@ -32,7 +33,6 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
   const [selectedCookbooks, setSelectedCookbooks] = useState([]);
   const [imageData, setImageData] = useState();
-  const [imagePath, setImagePath] = useState("");
   const [recipeData, setRecipeData] = useState({
     img: "",
     title: "",
@@ -97,11 +97,6 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
     dispatch(reset());
   }, [isError, isSuccess, deleteRecipeSuccess]);
-
-  function handleFileChange({ target }) {
-    setImageData(target.files[0]);
-    setImagePath(target.value);
-  }
 
   function onRecipeChange(updatedArr, category, newEl) {
     if (newEl) {
@@ -192,14 +187,11 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
       <FiArrowLeft className='create-recipe__back-arrow' onClick={() => navigate(-1)} />
 
       <section className='create-recipe__section'>
-        <label>Max file size: 2MB</label>
-        <input
-          type='file'
-          value={imagePath}
-          name='file'
-          accept='image/*'
-          onChange={handleFileChange}
-          placeholder='upload image'
+        <Upload
+          defaultImage={recipeData.img}
+          imageData={imageData}
+          setImageData={setImageData}
+          removeDefaultImage={() => setRecipeData((prevState) => ({ ...prevState, img: "" }))}
         />
       </section>
 

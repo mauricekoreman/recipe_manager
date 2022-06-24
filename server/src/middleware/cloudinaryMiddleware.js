@@ -4,16 +4,18 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const cloudinary = require("../services/cloudinary.config");
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "recipe_images",
-    format: async () => "webp",
-    public_id: (req, file) => file.filename,
-  },
-});
 
 async function parser(req, res, next) {
+  const userId = req.user.id;
+
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: userId,
+      format: async () => "webp",
+      public_id: (req, file) => file.filename,
+    },
+  });
   // to check the size of the file :D
   // const fileSize = req.headers["content-length"] / 1024 / 1024;
   const maxSize = 2 * 1024 * 1024;
