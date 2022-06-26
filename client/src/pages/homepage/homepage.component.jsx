@@ -78,6 +78,7 @@ const Homepage = () => {
 
     if (cookbooksSuccess) {
       toast.success("Cookbook title updated!");
+      navigate(cookbookTitle);
       setShowEditCookbookModal(false);
     }
   }, [cookbooksError, cookbooksSuccess]);

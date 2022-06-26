@@ -82,6 +82,7 @@ export const cookbooksSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
+      state.isUpdated = false;
       state.message = "";
     },
     setCurrentCookbook: (state, action) => {
