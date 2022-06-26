@@ -71,18 +71,27 @@ async function httpCreateRecipe(req, res) {
   const createdBy = req.user.id;
   const recipeData = JSON.parse(req.body.recipeData);
   const cookbooks = JSON.parse(req.body.cookbooks);
-  const image = req.file?.path || recipeData.img;
-  const imageFileName = req.file?.filename;
 
   try {
     if (!recipeData.title || !recipeData.servings) {
       throw new Error("Please fill in all required fields");
     }
 
+    let imageRes;
+    if (req.file) {
+      imageRes = await cloudinary.uploader.upload(req.file.path, {
+        folder: createdBy,
+        public_id: req.file.filename,
+        format: "webp",
+      });
+
+      console.log(imageRes);
+    }
+
     Object.assign(recipeData, {
       createdBy: createdBy,
-      img: image,
-      imageFileName: imageFileName,
+      img: imageRes.url || recipeData.img,
+      imageFileName: imageRes.public_id || null,
     });
 
     const response = await createRecipe(recipeData);
@@ -105,18 +114,9 @@ async function httpUpdateRecipe(req, res) {
   const currentUser = req.user.id;
   const recipeData = JSON.parse(req.body.recipeData); // TODO: add error handling.
   const cookbooks = JSON.parse(req.body.cookbooks);
-  const image = req.file?.path || recipeData.img;
 
-  const newImageFileName = req.file?.filename;
+  const newImage = req.file;
   const oldImageFileName = recipeData.imageFileName;
-
-  // check if there is a createdBy in the recipeData. If not: create one.
-  if (!recipeData.createdBy) {
-    Object.assign(recipeData, {
-      createdBy: currentUser,
-      img: image,
-    });
-  }
 
   try {
     // Only the owner of the recipe can alter the recipe itself
@@ -129,17 +129,23 @@ async function httpUpdateRecipe(req, res) {
     }
 
     // Als gebruiker gebruiker de image wil verwijderen
-    if (!newImageFileName && recipeData.img === "") {
+    if (!newImage && recipeData.img === "") {
       oldImageFileName && (await cloudinary.uploader.destroy(oldImageFileName));
       Object.assign(recipeData, {
         imageFileName: "",
       });
     }
     // Als de gebruiker een nieuwe image wil uploaden
-    else if (newImageFileName) {
-      oldImageFileName && (await cloudinary.uploader.destroy(oldImageFileName));
+    else if (newImage) {
+      imageRes = await cloudinary.uploader.upload(newImage.path, {
+        folder: currentUser,
+        public_id: newImage.filename,
+        format: "webp",
+      });
+      oldImageFileName && cloudinary.uploader.destroy(oldImageFileName);
       Object.assign(recipeData, {
-        imageFileName: newImageFileName,
+        img: imageRes.url,
+        imageFileName: imageRes.public_id,
       });
     }
 

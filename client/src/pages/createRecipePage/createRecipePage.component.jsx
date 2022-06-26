@@ -35,6 +35,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const [imageData, setImageData] = useState();
   const [recipeData, setRecipeData] = useState({
     img: "",
+    createdBy: "",
     title: "",
     servings: 4,
     ingredients: [{ text: "", id: nanoid() }],
@@ -45,8 +46,18 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
     imageFileName: "",
   });
 
-  const { img, title, servings, ingredients, utensils, instructions, notes, tags, imageFileName } =
-    recipeData;
+  const {
+    img,
+    createdBy,
+    title,
+    servings,
+    ingredients,
+    utensils,
+    instructions,
+    notes,
+    tags,
+    imageFileName,
+  } = recipeData;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +81,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
       setRecipeData(() => ({
         img: lr.img,
+        createdBy: lr.createdBy,
         title: lr.title,
         servings: lr.servings,
         ingredients: lr.ingredients.map((el) => ({ text: el, id: nanoid() })),
@@ -157,6 +169,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
 
     const recipeDataSubmit = {
       img,
+      createdBy,
       title,
       servings,
       ingredients: removeIds(ingredients),
