@@ -54,7 +54,7 @@ const RequestPasswordReset = () => {
           required
           onChange={handleChange}
         />
-        <PrimaryButton text={"Send reset link"} type='submit' />
+        <PrimaryButton loading={isLoading} text={"Send reset link"} type='submit' />
       </form>
     </main>
   );

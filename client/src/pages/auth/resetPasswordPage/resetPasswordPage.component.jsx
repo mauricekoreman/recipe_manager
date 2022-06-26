@@ -16,7 +16,7 @@ const ResetPasswordPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isError, message, isSuccess } = useSelector((state) => state.auth);
+  const { isError, message, isLoading, isSuccess } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -64,7 +64,7 @@ const ResetPasswordPage = () => {
           placeholder='******'
           onChange={handleChange}
         />
-        <PrimaryButton type='submit' text={"Reset password"} />
+        <PrimaryButton loading={isLoading} type='submit' text={"Reset password"} />
       </form>
     </main>
   );

@@ -7,9 +7,20 @@
   color: #FFF; 
   border: none;
   width: 100%;
+  display: grid;
+  place-items: center;
+  font-size: $default-font-size;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  
+    &:hover {
+      background-color: $color-primary;
+    }
+  }
 
   &:hover {
     background-color: $color-primary--hover;
-    cursor: pointer;
   }
 }

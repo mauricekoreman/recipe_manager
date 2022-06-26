@@ -58,6 +58,7 @@ const LoginPage = () => {
       navigateActionText={"Register now!"}
       onSubmit={onSubmit}
       navigateTo={"/register"}
+      loading={isLoading}
     >
       <Input
         name='email'

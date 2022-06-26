@@ -11,13 +11,14 @@ const AuthLayout = ({
   navigateText,
   navigateActionText,
   navigateTo,
+  loading,
   children,
 }) => (
   <div className='auth'>
     <LandingHeading top={titleTop} title="Let's Cook It!" />
     <form className='auth__form' onSubmit={onSubmit}>
       {children}
-      <PrimaryButton type='submit' text={buttonText} />
+      <PrimaryButton loading={loading} type='submit' text={buttonText} />
     </form>
     <p className='auth__link__container'>
       {navigateText + " "}

@@ -26,7 +26,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
   const location = useLocation();
 
   const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
-  const { isError, isSuccess, deleteRecipeSuccess, message } = useSelector(
+  const { isError, isSuccess, isLoading, deleteRecipeSuccess, message } = useSelector(
     (state) => state.recipes
   );
   const { kitchen, type, season, diet, main, course } = useSelector((state) => state.tags);
@@ -326,7 +326,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
         />
       </section>
 
-      <PrimaryButton type='button' onClick={onSubmit} text={"Save recipe"} />
+      <PrimaryButton loading={isLoading} type='button' onClick={onSubmit} text={"Save recipe"} />
       {updateExistingRecipe && (
         <div className='delete-recipe'>
           <p>OR</p>
@@ -334,6 +334,7 @@ const CreateRecipePage = ({ updateExistingRecipe }) => {
             onClick={submitDeleteRecipe}
             className='delete-recipe__btn'
             text={"Delete recipe..."}
+            loading={isLoading}
           />
         </div>
       )}

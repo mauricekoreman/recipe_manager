@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth);
   const [showModal, setShowModal] = useState(false);
 
   const [userData, setUserData] = useState({
@@ -79,14 +79,21 @@ const SettingsPage = () => {
           text={"Change password"}
           className={"settings__btn settings__btn--password"}
           onClick={() => navigate("/password/requestReset")}
+          loading={isLoading}
         />
         <TextButton
           icon={<FiLogOut />}
           text={"Logout"}
           className={"settings__btn settings__btn--logout"}
           onClick={() => dispatch(logout())}
+          loading={isLoading}
         />
-        <PrimaryButton type='button' onClick={() => setShowModal(true)} text={"Save changes"} />
+        <PrimaryButton
+          type='button'
+          loading={isLoading}
+          onClick={() => setShowModal(true)}
+          text={"Save changes"}
+        />
         {showModal && (
           <Modal
             backdropClick={() => setShowModal(false)}
@@ -105,6 +112,7 @@ const SettingsPage = () => {
               type='submit'
               className='confirm-modal-btn'
               onClick={submitUserChanges}
+              loading={isLoading}
             />
           </Modal>
         )}
