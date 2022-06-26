@@ -12,7 +12,7 @@ const {
 const recipesRouter = express.Router();
 
 const { protect } = require("../../middleware/authMiddleware");
-const parser = require("../../middleware/cloudinaryMiddleware");
+const parser = require("../../middleware/multerMiddleware");
 
 // /recipes/
 recipesRouter.route("/").get(protect, httpGetRecipes).post(protect, parser, httpCreateRecipe);

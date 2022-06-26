@@ -18,11 +18,12 @@ const RegisterPage = () => {
     email: "",
     password: "",
     password2: "",
+    code: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, code } = formData;
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -46,6 +47,7 @@ const RegisterPage = () => {
         name,
         email,
         password,
+        code,
       };
 
       dispatch(register(userData));
@@ -90,6 +92,7 @@ const RegisterPage = () => {
         type='password'
         onChange={onChange}
       />
+      <Input name='code' label='Special code' placeholder='12345' type='text' onChange={onChange} />
     </AuthLayout>
   );
 };

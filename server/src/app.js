@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const helmet = require("helmet");
 // const morgan = require('morgan'); // TODO: find out what this is?
 
 const v1Router = require("./routes/v1");
@@ -8,6 +9,7 @@ const v1Router = require("./routes/v1");
 const app = express();
 
 app.use(cors({ origin: "http://localhost:3000" }));
+app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

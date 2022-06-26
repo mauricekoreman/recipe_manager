@@ -19,7 +19,7 @@ async function protect(req, res, next) {
       next();
     } catch (error) {
       return res.status(401).json({
-        error: "Not authorized",
+        error: "Not authorized, login required",
       });
     }
   }

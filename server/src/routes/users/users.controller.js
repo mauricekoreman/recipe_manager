@@ -14,7 +14,7 @@ const { hashItem } = require("../../utils/hashItem");
 // @route   POST api/v1/users/register
 // @access  Public
 async function httpRegisterUser(req, res) {
-  const { name, email, password } = req.body;
+  const { name, email, password, code } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({
@@ -23,6 +23,13 @@ async function httpRegisterUser(req, res) {
   }
 
   try {
+    // Check if secret code is correct
+    if (code !== process.env.REGISTER_CODE) {
+      return res.status(400).json({
+        error: "Wrong code...",
+      });
+    }
+
     // Check if user exists
     const userExists = await existUserByEmail(email);
 
