@@ -84,13 +84,11 @@ async function httpCreateRecipe(req, res) {
         public_id: req.file.filename,
         format: "webp",
       });
-
-      console.log(imageRes);
     }
 
     Object.assign(recipeData, {
       createdBy: createdBy,
-      img: imageRes.url || recipeData.img,
+      img: imageRes.secure_url || recipeData.img,
       imageFileName: imageRes.public_id || null,
     });
 
