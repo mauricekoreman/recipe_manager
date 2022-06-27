@@ -12,6 +12,7 @@ app.use(cors({ origin: "http://localhost:3000" }));
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
   })
 );
 
