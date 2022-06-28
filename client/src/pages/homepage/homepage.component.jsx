@@ -31,7 +31,7 @@ const Homepage = () => {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState("");
 
-  const { currentCookbookRecipes, isError, isSuccess, message } = useSelector(
+  const { currentCookbookRecipes, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.recipes
   );
   const { cookbooks, currentCookbook } = useSelector((state) => state.cookbooks);
@@ -149,7 +149,7 @@ const Homepage = () => {
           )}
         </div>
 
-        <Outlet context={recipes} />
+        <Outlet context={{ recipes, isLoading }} />
         <FloatingButton
           onClick={() => navigate(`${location.pathname}/create-recipe`)}
           icon={<FiPlus />}
